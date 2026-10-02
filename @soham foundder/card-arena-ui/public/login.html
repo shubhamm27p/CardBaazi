@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Arena - Login</title>
+    <!-- Modern Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/login.css">
+    
+    <!-- Clerk Authentication SDK -->
+    <script
+      async
+      crossorigin="anonymous"
+      data-clerk-publishable-key="pk_test_cmVuZXdlZC1zaGVlcGRvZy04MjE2LmNsZXJrLmFjY291bnRzLmRldiQ"
+      src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@4/dist/clerk.browser.js"
+    ></script>
+</head>
+<body>
+    <!-- Immersive Background Animation -->
+    <div class="background-animation">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+
+    <!-- Glassmorphic Login Container -->
+    <div class="login-container">
+        <div class="logo-wrapper">
+            <h1 class="logo-text">CARD <span>ARENA</span></h1>
+            <p class="subtitle">Enter the battleground</p>
+        </div>
+        
+        <!-- Clerk Sign-In Component mounts here -->
+        <div id="sign-in"></div>
+    </div>
+
+    <!-- Clerk Auth Logic -->
+    <script src="js/auth.js" type="module"></script>
+</body>
+</html>

@@ -46,10 +46,25 @@ app.use('/play-28', createProxyMiddleware({
   }
 }));
 
-app.use(express.static(path.join(__dirname, '.')));
+// Disable caching for the root pages to ensure auth updates propagate
+app.use((req, res, next) => {
+  if (req.url === '/' || req.url === '/index.html' || req.url === '/hub.html') {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  }
+  next();
+});
 
+// Route root to login page explicitly
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
+
+// Serve public directory
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Fallback
 app.use((req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'login.html')); // Fallback to login instead of index
 });
 
 app.listen(PORT, () => {

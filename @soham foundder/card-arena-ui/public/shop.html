@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Card Arena - Token Shop & Rewards</title>
+  <meta name="description" content="Unlock premium avatars, tables, card backs, and effects in the Card Arena Token Shop.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="top-nav glass-panel">
+    <a href="index.html" class="nav-brand">
+      <span class="text-gold">♠</span> Card Arena
+    </a>
+    <div class="nav-links">
+      <a href="lobby.html">Match Room</a>
+      <a href="shop.html" class="active">Token Shop</a>
+    </div>
+    <div class="user-info">
+      <div class="token-balance" id="token-balance">
+        🪙 12,500 TOKENS
+      </div>
+    </div>
+  </nav>
+
+  <div class="shop-container">
+    
+    <!-- Main Content Area -->
+    <main class="shop-main">
+      
+      <!-- Token Shop Banner -->
+      <div class="section-header">
+        <h2>🪙 TOKEN SHOP</h2>
+      </div>
+
+      <!-- Categories -->
+      <div class="shop-categories">
+        
+        <!-- Profile Rewards -->
+        <h3 class="text-gold" style="margin-bottom: 15px;">🎨 PROFILE REWARDS</h3>
+        <div class="rewards-grid" style="margin-bottom: 40px;">
+          <!-- Item 1 -->
+          <div class="reward-card glass-panel" onclick="unlockReward(this, 'Golden Avatar', 2500, '👑')">
+            <div class="reward-art">👑</div>
+            <div class="reward-title">Golden Avatar</div>
+            <div class="reward-price">🪙 2,500 TOKENS</div>
+            <button class="btn-gold">Unlock</button>
+          </div>
+          <!-- Item 2 -->
+          <div class="reward-card glass-panel unlocked">
+            <div class="reward-art" style="border-color: var(--gold-primary); box-shadow: 0 0 15px rgba(212,175,55,0.4);">🖼️</div>
+            <div class="reward-title">Golden Avatar Frame</div>
+            <div class="reward-price">✓ UNLOCKED</div>
+            <button class="btn-outline">Equip</button>
+          </div>
+          <!-- Item 3 -->
+          <div class="reward-card glass-panel" onclick="unlockReward(this, 'Royal Player Badge', 1500, '🎖️')">
+            <div class="reward-art">🎖️</div>
+            <div class="reward-title">Royal Player Badge</div>
+            <div class="reward-price">🪙 1,500 TOKENS</div>
+            <button class="btn-gold">Unlock</button>
+          </div>
+        </div>
+
+        <!-- Table Themes -->
+        <h3 class="text-gold" style="margin-bottom: 15px;">🃏 CARD TABLE THEMES</h3>
+        <div class="rewards-grid" style="margin-bottom: 40px;">
+          <!-- Item 1 -->
+          <div class="reward-card glass-panel" onclick="unlockReward(this, 'Royal Gold Table', 5000, '🥇')">
+            <div class="reward-art" style="background: linear-gradient(135deg, #d4af37, #996515);"></div>
+            <div class="reward-title">Royal Gold Table</div>
+            <div class="reward-price">🪙 5,000 TOKENS</div>
+            <button class="btn-gold">Unlock</button>
+          </div>
+          <!-- Item 2 -->
+          <div class="reward-card glass-panel" onclick="unlockReward(this, 'Classic Indian Table', 3000, '🕌')">
+            <div class="reward-art" style="background: var(--emerald-table);"></div>
+            <div class="reward-title">Classic Indian Table</div>
+            <div class="reward-price">🪙 3,000 TOKENS</div>
+            <button class="btn-gold">Unlock</button>
+          </div>
+          <!-- Item 3 -->
+          <div class="reward-card glass-panel" onclick="unlockReward(this, 'Royal Red Table', 4000, '🔴')">
+            <div class="reward-art" style="background: radial-gradient(circle, #8b0000, #300000);"></div>
+            <div class="reward-title">Royal Red Table</div>
+            <div class="reward-price">🪙 4,000 TOKENS</div>
+            <button class="btn-gold">Unlock</button>
+          </div>
+        </div>
+
+        <!-- Card Backs -->
+        <h3 class="text-gold" style="margin-bottom: 15px;">🂠 CARD BACKS</h3>
+        <div class="rewards-grid" style="margin-bottom: 40px;">
+          <!-- Item 1 -->
+          <div class="reward-card glass-panel" onclick="unlockReward(this, 'Golden Pattern', 1000, '🂠')">
+            <div class="reward-art">🂠</div>
+            <div class="reward-title">Golden Pattern</div>
+            <div class="reward-price">🪙 1,000 TOKENS</div>
+            <button class="btn-gold">Unlock</button>
+          </div>
+          <!-- Item 2 -->
+          <div class="reward-card glass-panel" onclick="unlockReward(this, 'Traditional Red', 500, '🎴')">
+            <div class="reward-art">🎴</div>
+            <div class="reward-title">Traditional Red</div>
+            <div class="reward-price">🪙 500 TOKENS</div>
+            <button class="btn-gold">Unlock</button>
+          </div>
+        </div>
+
+        <!-- Effects -->
+        <h3 class="text-gold" style="margin-bottom: 15px;">✨ EFFECTS</h3>
+        <div class="rewards-grid">
+          <!-- Item 1 -->
+          <div class="reward-card glass-panel" onclick="unlockReward(this, 'Premium Win Effect', 8000, '🎇')">
+            <div class="reward-art">🎇</div>
+            <div class="reward-title">Premium Win Effect</div>
+            <div class="reward-price">🪙 8,000 TOKENS</div>
+            <button class="btn-gold">Unlock</button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Sidebar (Daily Rewards, Level, Achievements) -->
+    <aside class="shop-sidebar">
+      
+      <!-- Level System -->
+      <div class="glass-panel level-card">
+        <div class="level-badge">18</div>
+        <h3 class="text-gold">LEVEL 18</h3>
+        <div class="ach-progress-bar" style="margin: 15px 0 5px; height: 8px;">
+          <div class="ach-progress-fill" style="width: 72%;"></div>
+        </div>
+        <div class="level-xp">1,820 / 2,500 XP</div>
+        <div class="level-next">
+          Next Level Reward: <span class="text-gold">🪙 500 Tokens</span>
+        </div>
+      </div>
+
+      <!-- Daily Reward -->
+      <div class="glass-panel" style="padding: 20px;">
+        <h3 class="text-gold" style="margin-bottom: 15px; font-size: 16px;">DAILY REWARD</h3>
+        <div style="font-size: 12px; color: var(--warning); margin-bottom: 10px; font-weight: 700;">🔥 7 DAY STREAK</div>
+        
+        <div class="daily-rewards-container">
+          <div class="daily-day claimed">
+            <div class="day-label">Day 1</div>
+            <div class="day-reward">🪙 50</div>
+          </div>
+          <div class="daily-day claimed">
+            <div class="day-label">Day 2</div>
+            <div class="day-reward">🪙 75</div>
+          </div>
+          <div class="daily-day active" onclick="claimDaily(this)">
+            <div class="day-label">Day 3</div>
+            <div class="day-reward">🪙 100</div>
+          </div>
+          <div class="daily-day">
+            <div class="day-label">Day 4</div>
+            <div class="day-reward">🪙 150</div>
+          </div>
+          <div class="daily-day">
+            <div class="day-label">Day 7</div>
+            <div class="day-reward">🎁 SPECIAL</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Achievements -->
+      <div class="glass-panel" style="padding: 20px;">
+        <h3 class="text-gold" style="margin-bottom: 15px; font-size: 16px;">🏆 ACHIEVEMENTS</h3>
+        
+        <div class="achievement-list">
+          <!-- Achievement 1 -->
+          <div class="achievement-item">
+            <div class="ach-icon">🌟</div>
+            <div class="ach-details">
+              <div class="ach-title">Card Master</div>
+              <div class="ach-desc">Complete 25 matches.</div>
+              <div class="ach-progress-bar"><div class="ach-progress-fill" style="width: 72%;"></div></div>
+              <div class="ach-meta">
+                <span>18 / 25 Matches</span>
+                <span>🪙 500 Tokens</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Achievement 2 -->
+          <div class="achievement-item">
+            <div class="ach-icon">⚔️</div>
+            <div class="ach-details">
+              <div class="ach-title">Dehla Champion</div>
+              <div class="ach-desc">Complete 50 Dehla Pakad matches.</div>
+              <div class="ach-progress-bar"><div class="ach-progress-fill" style="width: 10%;"></div></div>
+              <div class="ach-meta">
+                <span>5 / 50 Matches</span>
+                <span>🪙 1,000 Tokens</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Achievement 3 -->
+          <div class="achievement-item">
+            <div class="ach-icon">🎲</div>
+            <div class="ach-details">
+              <div class="ach-title">Lavni Player</div>
+              <div class="ach-desc">Complete 25 7 Lavni matches.</div>
+              <div class="ach-progress-bar"><div class="ach-progress-fill" style="width: 100%;"></div></div>
+              <div class="ach-meta">
+                <span class="text-gold">✓ Completed</span>
+                <button class="btn-outline" style="padding: 2px 8px; font-size: 10px;">Claim</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </aside>
+  </div>
+
+  <!-- Reward Notification Modal -->
+  <div class="modal-overlay" id="rewardModal">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="text-gold" style="font-size: 24px; font-weight: 700; margin-bottom: 10px; font-family: 'Cinzel', serif;">
+          🎉 UNLOCKED!
+        </div>
+        <div class="modal-icon" id="modalIcon">👑</div>
+        <h2 id="modalTitle" style="margin-bottom: 15px;">GOLDEN AVATAR</h2>
+        <div class="text-gold" style="font-size: 20px; font-weight: bold; margin-bottom: 25px;">
+          🪙 -<span id="modalPrice">2500</span>
+        </div>
+        <button class="btn-gold" onclick="closeModal()" style="width: 100%;">EQUIP NOW</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/shop.js"></script>
+</body>
+</html>

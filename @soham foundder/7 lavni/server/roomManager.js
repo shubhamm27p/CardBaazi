@@ -21,12 +21,29 @@ export class RoomManager {
     this.io = io;
     this.rooms = new Map(); // roomId -> Room
     this.socketToRoom = new Map(); // socketId -> { roomId, seatIndex }
+
+    // Security: Cleanup idle rooms every 15 minutes to prevent memory DoS
+    setInterval(() => this.cleanupIdleRooms(), 15 * 60 * 1000);
+  }
+
+  cleanupIdleRooms() {
+    const now = Date.now();
+    const IDLE_TIMEOUT = 30 * 60 * 1000; // 30 minutes
+    
+    for (const [roomId, room] of this.rooms.entries()) {
+      // If room is older than 30 mins and either still waiting or hasn't had a turn recently
+      const lastActivity = Math.max(room.createdAt || 0, room.turnStartTime || 0);
+      if (now - lastActivity > IDLE_TIMEOUT) {
+        if (room.turnTimer) clearInterval(room.turnTimer);
+        this.rooms.delete(roomId);
+      }
+    }
   }
 
   generateRoomCode() {
     let code;
     do {
-      code = Math.floor(1000 + Math.random() * 9000).toString();
+      code = Math.random().toString(36).substring(2, 8).toUpperCase();
     } while (this.rooms.has(code));
     return code;
   }
