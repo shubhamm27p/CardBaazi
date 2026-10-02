@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sati Lavni - Competitive Multiplayer Indian Card Game (Sevens)</title>
+  <meta name="description" content="Play Sati Lavni (Badam Satti / 7 of Hearts), the serious 4-player Indian sequence card game. Individual play, 52 cards, sequence building from 7s to A & K.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/cards.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🃏</text></svg>">
+</head>
+<body>
+  <canvas id="confetti-canvas"></canvas>
+
+  <div id="app-container">
+    <!-- Top Navigation Bar -->
+    <header class="top-bar">
+      <div class="brand-section">
+        <h1 class="brand-logo">
+          <span class="brand-icon">👑</span> SATI LAVNI
+        </h1>
+        <div id="room-badge" class="room-badge" style="display: none;">
+          <span class="badge-dot"></span>
+          <span id="room-code-display">Room: ...</span>
+        </div>
+        <div class="ranked-profile-tag" id="ranked-tag">
+          <span>MMR: <strong id="profile-rating" class="ranked-rating">1200</strong></span>
+          <span style="opacity: 0.5;">|</span>
+          <span id="profile-record">0W - 0L</span>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button id="btn-motion-toggle" class="icon-btn" title="Toggle Smooth Animations">
+          <span>⚡</span> Motion
+        </button>
+        <button id="btn-audio-toggle" class="icon-btn" title="Toggle Sound">
+          <span id="audio-icon">🔊</span> Sound
+        </button>
+        <button id="btn-rules" class="icon-btn" title="Game Rules">
+          <span>📜</span> Rules
+        </button>
+        <button id="btn-history" class="icon-btn" title="Move History">
+          <span>📋</span> Moves
+        </button>
+        <button id="btn-new-game" class="icon-btn" title="Start New Game / Lobby">
+          <span>🔄</span> Menu
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Table Arena -->
+    <main class="table-arena">
+      <div class="felt-table">
+        <!-- Floating Announcement Banner -->
+        <div id="announcement-banner" class="announcement-banner pulse-highlight">
+          <span class="announcement-icon">✨</span>
+          <span id="announcement-text" class="announcement-text">Welcome to Sati Lavni! 7♥ starts the game.</span>
+        </div>
+
+        <!-- Floating Suit Opened Banner -->
+        <div id="suit-opened-toast" class="suit-opened-toast">
+          <span id="suit-opened-text">♦ DIAMONDS SUIT OPENED</span>
+        </div>
+
+        <!-- ================= TOP: PLAYER 2 ================= -->
+        <div id="pod-top" class="player-pod seat-top">
+          <div class="player-badge">
+            <div class="player-avatar-wrap">
+              <div class="player-avatar" id="avatar-top">👳‍♂️</div>
+              <svg class="turn-timer-ring" viewBox="0 0 36 36">
+                <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="3"/>
+                <path id="timer-path-top" class="circle-timer" stroke="#facc15" stroke-dasharray="100, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="3"/>
+              </svg>
+            </div>
+            <div class="player-info">
+              <span id="name-top" class="player-name">Player Top</span>
+              <div class="player-meta">
+                <span class="card-count-pill" id="cards-top">13 cards</span>
+                <span id="status-top"></span>
+              </div>
+              <div class="danger-indicator" id="danger-top">⚠️ DANGER: 2 CARDS</div>
+            </div>
+          </div>
+          <div id="cards-visual-top" class="opponent-cards-visual"></div>
+        </div>
+
+        <!-- ================= MIDDLE: LEFT POD, CENTER BOARD, RIGHT POD ================= -->
+        <div class="table-middle-row">
+          <!-- Left Player Pod (Player 3) -->
+          <div id="pod-left" class="player-pod seat-left">
+            <div class="player-badge">
+              <div class="player-avatar-wrap">
+                <div class="player-avatar" id="avatar-left">👩‍🦰</div>
+                <svg class="turn-timer-ring" viewBox="0 0 36 36">
+                  <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="3"/>
+                  <path id="timer-path-left" class="circle-timer" stroke="#facc15" stroke-dasharray="100, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="3"/>
+                </svg>
+              </div>
+              <div class="player-info">
+                <span id="name-left" class="player-name">Player Left</span>
+                <div class="player-meta">
+                  <span class="card-count-pill" id="cards-left">13 cards</span>
+                  <span id="status-left"></span>
+                </div>
+                <div class="danger-indicator" id="danger-left">⚠️ DANGER: 2 CARDS</div>
+              </div>
+            </div>
+            <div id="cards-visual-left" class="opponent-cards-visual"></div>
+          </div>
+
+          <!-- Center Board: 4 Suit Rows (Hearts, Diamonds, Clubs, Spades) -->
+          <div class="board-center" id="board-center">
+            <!-- Hearts Row -->
+            <div class="suit-row suit-h" id="row-H" data-suit="H">
+              <div class="suit-header-badge">
+                <span class="badge-icon">♥</span>
+                <span>HEARTS</span>
+              </div>
+              <div class="suit-slots-track" id="track-H"></div>
+            </div>
+
+            <!-- Diamonds Row -->
+            <div class="suit-row suit-d" id="row-D" data-suit="D">
+              <div class="suit-header-badge">
+                <span class="badge-icon">♦</span>
+                <span>DIAMONDS</span>
+              </div>
+              <div class="suit-slots-track" id="track-D"></div>
+            </div>
+
+            <!-- Clubs Row -->
+            <div class="suit-row suit-c" id="row-C" data-suit="C">
+              <div class="suit-header-badge">
+                <span class="badge-icon">♣</span>
+                <span>CLUBS</span>
+              </div>
+              <div class="suit-slots-track" id="track-C"></div>
+            </div>
+
+            <!-- Spades Row -->
+            <div class="suit-row suit-s" id="row-S" data-suit="S">
+              <div class="suit-header-badge">
+                <span class="badge-icon">♠</span>
+                <span>SPADES</span>
+              </div>
+              <div class="suit-slots-track" id="track-S"></div>
+            </div>
+          </div>
+
+          <!-- Right Player Pod (Player 4) -->
+          <div id="pod-right" class="player-pod seat-right">
+            <div class="player-badge">
+              <div class="player-avatar-wrap">
+                <div class="player-avatar" id="avatar-right">🧔</div>
+                <svg class="turn-timer-ring" viewBox="0 0 36 36">
+                  <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="3"/>
+                  <path id="timer-path-right" class="circle-timer" stroke="#facc15" stroke-dasharray="100, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="3"/>
+                </svg>
+              </div>
+              <div class="player-info">
+                <span id="name-right" class="player-name">Player Right</span>
+                <div class="player-meta">
+                  <span class="card-count-pill" id="cards-right">13 cards</span>
+                  <span id="status-right"></span>
+                </div>
+                <div class="danger-indicator" id="danger-right">⚠️ DANGER: 2 CARDS</div>
+              </div>
+            </div>
+            <div id="cards-visual-right" class="opponent-cards-visual"></div>
+          </div>
+        </div>
+
+        <!-- ================= BOTTOM: DEDICATED PLAYER AREA (HIGHEST PRIORITY) ================= -->
+        <div id="pod-bottom" class="player-pod seat-bottom player-zone-bottom">
+          <!-- 1. Turn & Status Indicator -->
+          <div class="turn-indicator-bar" id="turn-indicator-bar">
+            <div class="turn-state-pill" id="turn-state-pill">
+              <span class="turn-pulse-dot"></span>
+              <span id="action-status-hint" class="action-status-hint">Waiting for game to begin...</span>
+            </div>
+            <div class="turn-countdown-badge" id="turn-countdown-wrap">
+              <span id="turn-timer-display" class="turn-timer-display"></span>
+            </div>
+          </div>
+
+          <!-- 2. Hand Header Bar -->
+          <div class="hand-header-bar">
+            <div class="hand-title-wrap">
+              <span class="hand-icon">🎴</span>
+              <span class="hand-heading">YOUR CARDS</span>
+              <span class="hand-count-badge" id="cards-bottom">13 cards</span>
+            </div>
+            <div class="hand-sort-hint">
+              <span>♥ Hearts → ♦ Diamonds → ♣ Clubs → ♠ Spades</span>
+            </div>
+          </div>
+
+          <!-- 3. Player's Cards Hand (High-Priority Dedicated Viewport) -->
+          <div class="player-hand-container" id="player-hand-container">
+            <div id="player-hand" class="player-hand"></div>
+          </div>
+
+          <!-- 4. Selected Card Confirmation Bar (Appears when legal card is tapped) -->
+          <div class="selected-card-bar" id="selected-card-bar" style="display: none;">
+            <div class="selected-card-info">
+              <span class="selected-label">Selected Card:</span>
+              <span class="selected-card-name" id="selected-card-name">7♥</span>
+            </div>
+            <div class="selected-card-actions">
+              <button id="btn-confirm-play" class="btn-confirm-play" title="Play this card to the sequence">
+                <span>▶</span> PLAY CARD
+              </button>
+              <button id="btn-cancel-select" class="btn-cancel-select" title="Cancel selection">
+                <span>✕</span> CANCEL
+              </button>
+            </div>
+          </div>
+
+          <!-- 5. Table Action Controls Bar (Strictly BELOW Player's Cards) -->
+          <div class="bottom-controls-bar">
+            <!-- Current Player Identity Badge -->
+            <div class="player-badge bottom-badge">
+              <div class="player-avatar-wrap">
+                <div class="player-avatar" id="avatar-bottom">🤴</div>
+                <svg class="turn-timer-ring" viewBox="0 0 36 36">
+                  <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="3"/>
+                  <path id="timer-path-bottom" class="circle-timer" stroke="#facc15" stroke-dasharray="100, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="3"/>
+                </svg>
+              </div>
+              <div class="player-info">
+                <span id="name-bottom" class="player-name">You</span>
+                <span class="player-role-tag">PLAYER 1</span>
+              </div>
+            </div>
+
+            <!-- Quick Emoji Reactions -->
+            <div class="emoji-bar">
+              <button class="emoji-btn" data-emoji="🙏" title="Namaste">🙏</button>
+              <button class="emoji-btn" data-emoji="👏" title="Well played">👏</button>
+              <button class="emoji-btn" data-emoji="⏳" title="Hurry up">⏳</button>
+              <button class="emoji-btn" data-emoji="🔥" title="Nice move">🔥</button>
+              <button class="emoji-btn" data-emoji="😮" title="Wow">😮</button>
+            </div>
+
+            <!-- SKIP / PASS BUTTON (Strict Validation & Distinct Locked State) -->
+            <button id="btn-skip" class="skip-btn is-locked is-disabled" title="Skip turn (Locked if you have legal cards)">
+              <span id="skip-btn-icon">🔒</span> <span id="skip-btn-text">SKIP LOCKED</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL: Main Lobby / Mode Selection -->
+  <div id="modal-lobby" class="modal-overlay is-open">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title">👑 SATI LAVNI</h2>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="player-name-input">Your Name</label>
+        <input type="text" id="player-name-input" class="form-input" value="Player 1" maxlength="15" placeholder="Enter your name">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Choose Avatar</label>
+        <div class="avatar-selector" id="avatar-selector">
+          <div class="avatar-choice is-selected" data-avatar="🤴">🤴</div>
+          <div class="avatar-choice" data-avatar="👸">👸</div>
+          <div class="avatar-choice" data-avatar="👳‍♂️">👳‍♂️</div>
+          <div class="avatar-choice" data-avatar="👩‍🦰">👩‍🦰</div>
+          <div class="avatar-choice" data-avatar="🧔">🧔</div>
+          <div class="avatar-choice" data-avatar="👩‍💼">👩‍💼</div>
+          <div class="avatar-choice" data-avatar="👨‍🎓">👨‍🎓</div>
+          <div class="avatar-choice" data-avatar="👧">👧</div>
+          <div class="avatar-choice" data-avatar="🦁">🦁</div>
+          <div class="avatar-choice" data-avatar="🦚">🦚</div>
+        </div>
+      </div>
+
+      <div class="lobby-buttons-grid">
+        <button id="btn-mode-expert" class="btn-primary">
+          <span>👑</span> Play vs EXPERT AI (Competitive)
+        </button>
+
+        <button id="btn-mode-hard" class="btn-secondary" style="border-color: #d4af37;">
+          <span>🧠</span> Play vs HARD AI (Strategic)
+        </button>
+
+        <button id="btn-mode-quick" class="btn-secondary">
+          <span>⚡</span> Quick Play (Casual Match)
+        </button>
+
+        <button id="btn-mode-ranked" class="btn-secondary" style="background: rgba(234, 179, 8, 0.15); border-color: #facc15;">
+          <span>🏆</span> Competitive Ranked Match (MMR)
+        </button>
+
+        <button id="btn-create-multiplayer" class="btn-secondary">
+          <span>🔒</span> Create Private Multiplayer Room
+        </button>
+
+        <div style="display: flex; gap: 8px; margin-top: 4px;">
+          <input type="text" id="room-code-input" class="form-input" placeholder="Room Code (e.g. 5421)" maxlength="6" style="text-transform: uppercase;">
+          <button id="btn-join-room" class="btn-secondary" style="white-space: nowrap;">
+            Join Room
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Multiplayer Waiting Lobby -->
+  <div id="modal-waiting" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title">Multiplayer Room <span id="waiting-room-code" style="color: #fde047;"></span></h2>
+        <button class="modal-close-btn" id="btn-leave-waiting">&times;</button>
+      </div>
+
+      <p style="font-size: 14px; color: #cbd5e1; margin-bottom: 16px;">
+        Share this code with your friends or fill empty seats with AI bots:
+      </p>
+
+      <div style="display: flex; gap: 8px; margin-bottom: 20px;">
+        <input type="text" id="share-link-input" class="form-input" readonly>
+        <button id="btn-copy-link" class="btn-secondary" style="white-space: nowrap;">Copy Link</button>
+      </div>
+
+      <div id="waiting-seats-list" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+        <!-- Filled by JS -->
+      </div>
+
+      <div style="display: flex; gap: 10px;">
+        <button id="btn-fill-bots" class="btn-primary" style="flex: 1;">
+          <span>🤖</span> Fill Remaining with AI Bots
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Rules -->
+  <div id="modal-rules" class="modal-overlay">
+    <div class="modal-card" style="max-width: 600px;">
+      <div class="modal-header">
+        <h2 class="modal-title">📜 Sati Lavni Rules</h2>
+        <button class="modal-close-btn" id="btn-close-rules">&times;</button>
+      </div>
+      <div style="max-height: 400px; overflow-y: auto; font-size: 14px; line-height: 1.6; color: #cbd5e1; padding-right: 8px;">
+        <h3 style="color: #fde047; margin: 10px 0 4px 0;">1. Overview</h3>
+        <p>Sati Lavni (also known as Badam Satti or Sevens) is a traditional 4-player individual card game using a standard 52-card deck. There are NO teams, NO trumps, and NO trick-taking.</p>
+        
+        <h3 style="color: #fde047; margin: 10px 0 4px 0;">2. Starting Card — 7♥</h3>
+        <p>The game <strong>always begins with the 7 of Hearts (7♥)</strong>. The player holding 7♥ must play it first. No other card can start the game.</p>
+
+        <h3 style="color: #fde047; margin: 10px 0 4px 0;">3. Sequence Building</h3>
+        <p>Cards in each suit form a sequence from Ace to King centered around 7:</p>
+        <p style="background: rgba(0,0,0,0.4); padding: 8px; border-radius: 6px; font-weight: 700; color: #fef08a; text-align: center;">
+          A ← 2 ← 3 ← 4 ← 5 ← 6 ← [ 7 ] → 8 → 9 → 10 → J → Q → K
+        </p>
+        <p>Once a 7 is placed, subsequent cards in that suit can be added one step down (e.g. 6, then 5...) or one step up (e.g. 8, then 9...). Gaps are never allowed.</p>
+
+        <h3 style="color: #fde047; margin: 10px 0 4px 0;">4. Showing Other 7s</h3>
+        <p>Once 7♥ opens the game, any player holding 7♦, 7♣, or 7♠ can play that 7 on their turn to start a new sequence for that suit!</p>
+
+        <h3 style="color: #fde047; margin: 10px 0 4px 0;">5. Hard Skip Rule</h3>
+        <p>If you have at least one valid card to play, you <strong>MUST</strong> play it. <strong>SKIP is strictly blocked if a legal card exists.</strong> You may only skip when you have zero playable cards.</p>
+
+        <h3 style="color: #fde047; margin: 10px 0 4px 0;">6. Winning & Strategy</h3>
+        <p>The first player to successfully play all 13 cards from their hand wins 1st Place! The game rewards strategic blocking (holding 7s to starve opponents) and safe discards (playing Aces and Kings).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Move History -->
+  <div id="modal-history" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title">📋 Move History</h2>
+        <button class="modal-close-btn" id="btn-close-history">&times;</button>
+      </div>
+      <div id="history-container" class="history-list">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Winner Celebration & Detailed Statistics -->
+  <div id="modal-winner" class="modal-overlay">
+    <div class="modal-card winner-modal-content" style="max-width: 650px; position: relative;">
+      <button class="modal-close-btn" id="btn-close-winner" style="position: absolute; top: 10px; right: 15px; background: transparent; border: none; color: #d4af37; font-size: 24px; cursor: pointer; padding: 5px;">&times;</button>
+      <div class="winner-trophy">🏆</div>
+      <h2 class="winner-heading">SATI LAVNI WINNER</h2>
+      <div id="winner-name-display" class="winner-name-display">Winner Name</div>
+
+      <div id="game-summary-meta" style="font-size: 13px; color: #cbd5e1; margin-bottom: 14px;">
+        Total Duration: <strong id="summary-duration" style="color: #fde047;">0s</strong> | Total Rounds: <strong id="summary-rounds" style="color: #fde047;">1</strong>
+      </div>
+
+      <table class="stats-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Player</th>
+            <th>Cards</th>
+            <th>Skips</th>
+            <th>Legal</th>
+            <th>Invalid</th>
+            <th>Avg Time</th>
+            <th>Fastest</th>
+          </tr>
+        </thead>
+        <tbody id="rankings-table-body">
+          <!-- Filled by JS -->
+        </tbody>
+      </table>
+
+      <button id="btn-play-again" class="btn-primary" style="width: 100%; justify-content: center;">
+        <span>🔄</span> Play Again
+      </button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
