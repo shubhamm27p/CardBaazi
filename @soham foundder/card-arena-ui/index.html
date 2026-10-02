@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Card Arena - Main Hub</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .hub-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 80vh;
+      padding: 40px 0;
+      text-align: center;
+    }
+
+    .hub-title {
+      font-size: 64px;
+      margin-bottom: 20px;
+    }
+
+    .hub-subtitle {
+      color: var(--text-muted);
+      margin-bottom: 50px;
+      font-size: 18px;
+    }
+
+    .hub-links {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 1200px;
+    }
+
+    .hub-card {
+      width: 300px;
+      padding: 40px 20px;
+      text-decoration: none;
+      color: white;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .hub-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--gold-primary);
+      box-shadow: 0 15px 30px rgba(212, 175, 55, 0.2);
+    }
+
+    .hub-icon {
+      font-size: 64px;
+      margin-bottom: 10px;
+    }
+
+    .hub-card h2 {
+      font-family: 'Cinzel', serif;
+      color: var(--gold-light);
+    }
+
+    .hub-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="top-nav glass-panel">
+    <a href="index.html" class="nav-brand">
+      <span class="text-gold">♠</span> Card Arena
+    </a>
+
+  </nav>
+
+  <div class="hub-container">
+    <h1 class="hub-title text-gold">WELCOME TO CARD ARENA</h1>
+    <p class="hub-subtitle">Choose a module to preview the premium UI implementations.</p>
+
+
+    <h3 class="text-gold" style="margin-bottom: 20px;">GAMES</h3>
+    <div class="hub-links">
+      <a href="/play-28/" class="hub-card glass-panel" onclick="launchFullscreen(event, '/play-28/')">
+        <div class="hub-icon">🃏</div>
+        <h2>28 POINT</h2>
+        <p>Strategic 4-player trick-taking game.</p>
+      </a>
+
+      <a href="/10-lavani/" class="hub-card glass-panel" onclick="launchFullscreen(event, '/10-lavani/')">
+        <div class="hub-icon">⚔️</div>
+        <h2>10 LAVANI</h2>
+        <p>Play the 10 Lavani game project directly.</p>
+      </a>
+
+      <a href="/7-lavni/" class="hub-card glass-panel" onclick="launchFullscreen(event, '/7-lavni/')">
+        <div class="hub-icon">🎲</div>
+        <h2>7 LAVNI</h2>
+        <p>Fast-paced competitive 7-card game.</p>
+      </a>
+    </div>
+  </div>
+
+  <script>
+
+    // Exit fullscreen when returning to the hub
+    document.addEventListener('DOMContentLoaded', () => {
+      if (document.fullscreenElement) {
+        document.exitFullscreen().catch(err => console.log(err));
+      }
+    });
+
+    // Launch game in fullscreen
+    function launchFullscreen(event, url) {
+      event.preventDefault();
+      const elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen().then(() => {
+          window.location.href = url;
+        }).catch(err => {
+          window.location.href = url;
+        });
+      } else {
+        window.location.href = url;
+      }
+    }
+  </script>
+</body>
+
+</html>

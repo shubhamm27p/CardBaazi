@@ -1,0 +1,166 @@
+/* TrickArea.css - Casino Central Felt Play Zone */
+.trick-area-container {
+  position: relative;
+  width: 360px;
+  height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+/* Center Table Emblem / Felt Ring with Subtle Indian Casino Motif */
+.trick-felt-ring {
+  position: absolute;
+  width: 270px;
+  height: 270px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(212, 175, 55, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+}
+
+.trick-center-logo {
+  font-family: 'Cinzel', serif;
+  font-size: 52px;
+  font-weight: 900;
+  color: rgba(212, 175, 55, 0.12);
+  user-select: none;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  letter-spacing: 2px;
+}
+
+/* Trick Info Header (Points & Led Suit) */
+.trick-info-badges {
+  position: absolute;
+  top: -36px;
+  display: flex;
+  gap: 10px;
+  z-index: 25;
+}
+
+.trick-badge {
+  background: linear-gradient(135deg, rgba(16, 28, 20, 0.95), rgba(8, 16, 11, 0.95));
+  border: 1.5px solid rgba(212, 175, 55, 0.5);
+  border-radius: 14px;
+  padding: 4px 12px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffd700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.trick-badge.points-badge {
+  color: #a5d6a7;
+}
+
+.points-sub-text {
+  font-size: 11px;
+  color: #e2e8f0;
+  font-weight: normal;
+}
+
+/* Played Cards Positioning */
+.played-card-spot {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation: cardSlideIn 0.25s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+@keyframes cardSlideIn {
+  from {
+    transform: scale(0.7) translateY(18px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.played-card-spot.pos-south {
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.played-card-spot.pos-north {
+  top: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.played-card-spot.pos-east {
+  right: 36px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.played-card-spot.pos-west {
+  left: 36px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.played-card-player-label {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffd700;
+  background: rgba(10, 18, 12, 0.85);
+  padding: 2px 8px;
+  border-radius: 8px;
+  margin-top: 4px;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+}
+
+/* Trick Winner Banner */
+.trick-winner-banner {
+  position: absolute;
+  background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%);
+  color: #1a0e02;
+  font-family: 'Cinzel', serif;
+  font-size: 13.5px;
+  font-weight: 900;
+  padding: 7px 20px;
+  border-radius: 22px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 215, 0, 0.7);
+  z-index: 40;
+  animation: bannerBounce 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  white-space: nowrap;
+  border: 1.5px solid #ffffff;
+}
+
+@keyframes bannerBounce {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .trick-area-container {
+    width: 280px;
+    height: 280px;
+  }
+  .trick-felt-ring {
+    width: 210px;
+    height: 210px;
+  }
+  .trick-center-logo {
+    font-size: 38px;
+  }
+}

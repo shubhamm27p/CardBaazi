@@ -1,0 +1,161 @@
+.scoreboard-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1.5px solid rgba(229, 185, 92, 0.3);
+  border-radius: 14px;
+  padding: 8px 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+}
+
+@media (max-width: 768px) {
+  .scoreboard-container {
+    gap: 8px;
+    padding: 6px 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+.score-team-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 110px;
+}
+
+.score-team-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.score-team-name {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.score-team-box.team-a .score-team-name {
+  color: #fcd34d;
+}
+
+.score-team-box.team-b .score-team-name {
+  color: #7dd3fc;
+}
+
+.score-team-members {
+  font-size: 0.65rem;
+  color: #94a3b8;
+  margin-bottom: 4px;
+}
+
+.score-dehla-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.score-dehla-count {
+  font-family: var(--font-royal);
+  font-size: 1.4rem;
+  font-weight: 900;
+  line-height: 1;
+  color: #ffffff;
+}
+
+.score-dehla-slots {
+  display: flex;
+  gap: 3px;
+}
+
+.dehla-slot {
+  width: 18px;
+  height: 22px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 800;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.25);
+  transition: all 0.25s ease;
+}
+
+.dehla-slot.captured {
+  background: #ffffff;
+  border: 1px solid var(--primary-gold);
+  box-shadow: 0 0 8px rgba(229, 185, 92, 0.6);
+  transform: scale(1.05);
+}
+
+.dehla-slot.captured.red {
+  color: #dc2626;
+}
+
+.dehla-slot.captured.black {
+  color: #0f172a;
+}
+
+.score-tricks-info {
+  font-size: 0.68rem;
+  color: #cbd5e1;
+  margin-top: 3px;
+}
+
+.score-divider {
+  width: 1px;
+  height: 40px;
+  background: rgba(229, 185, 92, 0.3);
+}
+
+/* Trick counter badge */
+.trick-indicator-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 6px;
+}
+
+.trick-indicator-label {
+  font-size: 0.65rem;
+  color: var(--primary-gold);
+  font-family: var(--font-royal);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.trick-indicator-value {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.trick-dots-row {
+  display: flex;
+  gap: 3px;
+  margin-top: 3px;
+}
+
+.trick-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.trick-dot.completed {
+  background: var(--primary-gold);
+  box-shadow: 0 0 4px var(--primary-gold);
+}
+
+.trick-dot.current {
+  background: #ffffff;
+  animation: pulseGlow 1s infinite;
+}

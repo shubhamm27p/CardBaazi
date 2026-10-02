@@ -1,0 +1,322 @@
+/* AiExplanationModal.css */
+
+.ai-modal-dialog {
+  background: linear-gradient(135deg, #111827 0%, #1e1b4b 100%);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  border-radius: 18px;
+  width: 90%;
+  max-width: 680px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75), 0 0 25px rgba(139, 92, 246, 0.2);
+  overflow: hidden;
+  animation: modalSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  color: #f3f4f6;
+}
+
+.ai-modal-header {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(17, 24, 39, 0.8);
+  backdrop-filter: blur(8px);
+}
+
+.ai-modal-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.ai-modal-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fbbf24;
+  letter-spacing: -0.01em;
+}
+
+.ai-modal-subtitle {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.ai-modal-body {
+  padding: 1.25rem 1.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.anti-cheat-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-size: 0.8rem;
+  color: #6ee7b7;
+  line-height: 1.4;
+}
+
+.anti-cheat-icon {
+  font-size: 1.35rem;
+  flex-shrink: 0;
+}
+
+.ai-telemetry-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+@media (max-width: 600px) {
+  .ai-telemetry-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.telemetry-card {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 0.65rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.telemetry-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+}
+
+.telemetry-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.telemetry-value.highlight {
+  color: #60a5fa;
+}
+
+.trump-status-tag {
+  font-size: 0.7rem;
+  color: #a78bfa;
+  font-weight: normal;
+  display: block;
+}
+
+.telemetry-badge {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.strength-strong {
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.strength-medium {
+  background: rgba(234, 179, 8, 0.2);
+  color: #facc15;
+  border: 1px solid rgba(234, 179, 8, 0.4);
+}
+
+.strength-weak {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.ai-section-box {
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.ai-detail-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.ai-detail-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.ai-detail-content {
+  font-size: 0.9rem;
+  color: #f1f5f9;
+}
+
+.current-trick-badge {
+  background: rgba(59, 130, 246, 0.15);
+  color: #93c5fd;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.points-badge {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fcd34d;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.legal-cards-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.legal-card-chip {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.decision-callout {
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.25) 0%, rgba(124, 58, 237, 0.25) 100%);
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.decision-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.decision-tag {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  background: #8b5cf6;
+  color: #ffffff;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.decision-card-chosen {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #fef08a;
+}
+
+.decision-reason {
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: #e2e8f0;
+}
+
+.raw-debug-box {
+  background: #090d16;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+}
+
+.raw-debug-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #a5b4fc;
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.04em;
+}
+
+.raw-debug-code {
+  margin: 0;
+  font-family: 'JetBrains Mono', Consolas, Monaco, monospace;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: #38bdf8;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.ai-empty-state {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: #94a3b8;
+}
+
+.ai-empty-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.ai-empty-state h3 {
+  margin: 0 0 0.5rem 0;
+  color: #f1f5f9;
+  font-size: 1.1rem;
+}
+
+.ai-empty-state p {
+  margin: 0 auto;
+  max-width: 420px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.ai-modal-footer {
+  padding: 0.85rem 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(17, 24, 39, 0.7);
+}
+
+.close-btn-primary {
+  background: #4f46e5;
+  color: #ffffff;
+  border: none;
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.close-btn-primary:hover {
+  background: #4338ca;
+  transform: translateY(-1px);
+}

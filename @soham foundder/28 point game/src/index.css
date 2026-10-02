@@ -1,0 +1,65 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Casino Gold & Metallic Accents */
+  --primary-gold: #ffd700;
+  --gold-accent: #d4af37;
+  --gold-light: #fce289;
+  --dark-gold: #997814;
+  --brass-trim: #c9a848;
+
+  /* Casino Felt Colors (Deep Emerald / Forest Baize) */
+  --felt-green-dark: #07170c;
+  --felt-green-mid: #0e2a17;
+  --felt-green-core: #133a1f;
+  --felt-green-light: #1c522d;
+
+  /* Polished Dark Wood / Leather Cushion Rail */
+  --wood-mahogany: #1e0f06;
+  --wood-dark: #120904;
+  --leather-rail: #190c05;
+
+  /* Casino Team Themes */
+  --team-a-emerald: #22c55e;
+  --team-b-ruby: #ef4444;
+
+  /* Typography */
+  --font-heading: 'Cinzel', Georgia, serif;
+  --font-body: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  background: radial-gradient(ellipse at 50% 40%, #112417 0%, #08130c 50%, #030805 100%);
+  color: #f8fafc;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  font-family: inherit;
+  outline: none;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--primary-gold);
+  outline-offset: 2px;
+}
