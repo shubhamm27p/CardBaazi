@@ -4,7 +4,7 @@
   "scripts": {
     "install-all": "cd card-arena-ui && npm install && cd ../\"7 lavni\" && npm install && cd ../\"28 point game\" && npm install",
     "build": "npm run install-all && cd \"28 point game\" && npm run build",
-    "start": "MONOLITH_MODE=true concurrently \"cd card-arena-ui && node server.js\" \"cd \\\"7 lavni\\\" && node server/server.js\""
+    "start": "MONOLITH_MODE=true cd card-arena-ui && node server.js"
   },
   "dependencies": {
     "concurrently": "^8.2.2"

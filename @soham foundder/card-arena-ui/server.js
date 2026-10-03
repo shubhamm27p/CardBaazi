@@ -1,13 +1,26 @@
-const express = require('express');
-const path = require('path');
-const { createProxyMiddleware } = require('http-proxy-middleware');
-const jwt = require('jsonwebtoken');
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { createProxyMiddleware } from 'http-proxy-middleware';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+import { createServer } from 'http';
+import { Server } from 'socket.io';
 
-// Load environment variables from the root directory
-require('dotenv').config({ path: path.join(__dirname, '../.env') });
+import { RoomManager } from './roomManager.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.join(__dirname, '../.env') });
 
 const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: { origin: '*', methods: ['GET', 'POST'] }
+});
+
 const PORT = process.env.PORT || 3000;
+const roomManager = new RoomManager(io);
 
 app.use(express.json());
 
@@ -30,17 +43,15 @@ const verifySupabaseJWT = (req, res, next) => {
     if (err) {
       return res.status(403).json({ error: 'Invalid or expired token' });
     }
-    // Token is valid! Attach decoded user info to the request
     req.user = decoded;
     next();
   });
 };
 
-// Example protected API route using the JWT middleware
 app.get('/api/protected-data', verifySupabaseJWT, (req, res) => {
   res.json({ message: 'Success! You have accessed protected data.', user: req.user });
 });
-// Ensure trailing slashes for clean relative path resolution
+
 app.use((req, res, next) => {
   if (req.url === '/7-lavni' || req.url === '/10-lavani' || req.url === '/play-28') {
     return res.redirect(req.url + '/');
@@ -48,45 +59,22 @@ app.use((req, res, next) => {
   next();
 });
 
-// Get production URLs from environment (or default to local dev ports)
-const LAVNI_URL = process.env.LAVNI_URL || 'http://localhost:3001';
-const GAME28_URL = process.env.GAME28_URL || 'http://localhost:3002';
-
-// Proxy 7 lavni to its backend
-app.use('/7-lavni', createProxyMiddleware({ 
-  target: LAVNI_URL, 
-  changeOrigin: true,
-  pathRewrite: { '^/7-lavni': '' }
-}));
-
-// Proxy Socket.IO for 7 lavni
-app.use('/socket.io', createProxyMiddleware({ 
-  target: LAVNI_URL, 
-  changeOrigin: true, 
-  ws: true,
-  pathRewrite: {
-    '^/': '/socket.io/'
-  }
-}));
+// Natively serve 7-lavni public folder since it's now integrated!
+app.use('/7-lavni', express.static(path.join(__dirname, '../7 lavni/public')));
 
 // Serve 10 lavani statically
 app.use('/10-lavani', express.static(path.join(__dirname, '../10 lavani/dist')));
 
 // Proxy or Redirect 28 point game
+const GAME28_URL = process.env.GAME28_URL || 'http://localhost:3002';
 app.use('/play-28', (req, res, next) => {
-  // If GAME28_URL is a production domain (like vercel), redirect directly to it
   if (GAME28_URL.includes('vercel.app')) {
     return res.redirect(GAME28_URL);
   }
-  
-  // If running as a monolith, serve the built static files instead of proxying!
   if (process.env.MONOLITH_MODE === 'true') {
-    // We rewrite the URL to strip /play-28/ for static serving
     req.url = req.url.replace(/^\/play-28/, '') || '/';
     return express.static(path.join(__dirname, '../28 point game/dist'))(req, res, next);
   }
-  
-  // Otherwise, proxy it for local development (npm run dev)
   createProxyMiddleware({ 
     target: GAME28_URL, 
     changeOrigin: true,
@@ -96,7 +84,7 @@ app.use('/play-28', (req, res, next) => {
   })(req, res, next);
 });
 
-// Disable caching for the root pages to ensure auth updates propagate
+// Disable caching for the root pages
 app.use((req, res, next) => {
   if (req.url === '/' || req.url === '/index.html' || req.url === '/hub.html') {
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
@@ -104,28 +92,161 @@ app.use((req, res, next) => {
   next();
 });
 
-// Route root to login page explicitly
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'login.html'));
-});
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
+app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'public', 'admin.html')));
+app.get('/admin-login', (req, res) => res.sendFile(path.join(__dirname, 'public', 'admin-login.html')));
 
-// Admin routes
-app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
-});
-
-app.get('/admin-login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'admin-login.html'));
-});
-
-// Serve public directory
 app.use(express.static(path.join(__dirname, 'public')));
+app.use((req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
 
-// Fallback
-app.use((req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'login.html')); // Fallback to login instead of index
+// --- 7 LAVNI SOCKET.IO EVENTS ---
+io.on('connection', (socket) => {
+  console.log(`[Socket] New connection: ${socket.id}`);
+
+  socket.on('create-room', ({ mode = 'expert', difficulty = 'expert', name, avatar, userId }) => {
+    try {
+      const room = roomManager.createRoom({
+        mode,
+        difficulty,
+        hostName: name,
+        hostAvatar: avatar,
+        userId,
+        socketId: socket.id
+      });
+      socket.join(room.id);
+      socket.emit('room-created', {
+        roomId: room.id,
+        seatIndex: 0,
+        mode: room.mode,
+        difficulty: room.difficulty
+      });
+      const clientState = roomManager.getClientState(room, 0);
+      socket.emit('game-state', clientState);
+    } catch (err) {
+      console.error('Error creating room:', err);
+      socket.emit('error-msg', { message: 'Failed to create room' });
+    }
+  });
+
+  socket.on('join-room', ({ roomId, name, avatar, userId }) => {
+    try {
+      const cleanRoomId = (roomId || '').trim();
+      const result = roomManager.joinRoom({
+        roomId: cleanRoomId,
+        name,
+        avatar,
+        userId,
+        socketId: socket.id
+      });
+
+      if (result.error) {
+        return socket.emit('error-msg', { message: result.error });
+      }
+
+      const { room, seatIndex, reconnected } = result;
+      socket.join(room.id);
+      socket.emit('room-joined', {
+        roomId: room.id,
+        seatIndex,
+        reconnected
+      });
+
+      roomManager.broadcastGameState(room.id);
+    } catch (err) {
+      console.error('Error joining room:', err);
+      socket.emit('error-msg', { message: 'Failed to join room' });
+    }
+  });
+
+  socket.on('fill-bots', ({ roomId }) => {
+    try {
+      const success = roomManager.fillWithBots(roomId);
+      if (!success) {
+        socket.emit('error-msg', { message: 'Cannot fill with bots' });
+      }
+    } catch (err) {
+      console.error('Error filling bots:', err);
+    }
+  });
+
+  socket.on('play-card', ({ roomId, cardId }) => {
+    try {
+      const mapping = roomManager.socketToRoom.get(socket.id);
+      if (!mapping || mapping.roomId !== roomId) {
+        return socket.emit('error-msg', { message: 'Room session mismatch' });
+      }
+
+      const result = roomManager.playCard(roomId, mapping.seatIndex, cardId);
+      if (!result.success) {
+        socket.emit('error-msg', { message: result.error });
+      }
+    } catch (err) {
+      console.error('Error playing card:', err);
+      socket.emit('error-msg', { message: 'Error playing card' });
+    }
+  });
+
+  socket.on('skip-turn', ({ roomId }) => {
+    try {
+      const mapping = roomManager.socketToRoom.get(socket.id);
+      if (!mapping || mapping.roomId !== roomId) {
+        return socket.emit('error-msg', { message: 'Room session mismatch' });
+      }
+
+      const result = roomManager.skipTurn(roomId, mapping.seatIndex);
+      if (!result.success) {
+        socket.emit('error-msg', { message: result.error });
+      }
+    } catch (err) {
+      console.error('Error skipping turn:', err);
+      socket.emit('error-msg', { message: 'Error skipping turn' });
+    }
+  });
+
+  socket.on('restart-game', ({ roomId }) => {
+    try {
+      const mapping = roomManager.socketToRoom.get(socket.id);
+      const seatIndex = mapping ? mapping.seatIndex : 0;
+      const result = roomManager.restartGame(roomId, seatIndex);
+      if (result && !result.success) {
+        socket.emit('error-msg', { message: result.error });
+      }
+    } catch (err) {
+      console.error('Error restarting game:', err);
+    }
+  });
+
+  socket.on('send-chat', ({ roomId, message, emoji }) => {
+    try {
+      const mapping = roomManager.socketToRoom.get(socket.id);
+      const room = roomManager.rooms.get(roomId);
+      if (!room || !mapping) return;
+
+      const player = room.seats[mapping.seatIndex];
+      const chatPayload = {
+        sender: player ? player.name : 'Player',
+        avatar: player ? player.avatar : '👤',
+        seatIndex: mapping.seatIndex,
+        message: message || '',
+        emoji: emoji || null,
+        timestamp: Date.now()
+      };
+
+      io.to(roomId).emit('chat-message', chatPayload);
+    } catch (err) {
+      console.error('Error in chat:', err);
+    }
+  });
+
+  socket.on('disconnect', () => {
+    console.log(`[Socket] Disconnected: ${socket.id}`);
+    roomManager.handleDisconnect(socket.id);
+  });
 });
 
-app.listen(PORT, () => {
-  console.log(`Backend server is running on http://localhost:${PORT}`);
+httpServer.listen(PORT, () => {
+  console.log(`===============================================`);
+  console.log(`🃏 CARD ARENA MONOLITH SERVER`);
+  console.log(`🌐 Server running at: http://localhost:${PORT}`);
+  console.log(`===============================================`);
 });
