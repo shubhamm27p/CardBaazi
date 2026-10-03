@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  hub:
+    image: node:18-alpine
+    container_name: card-arena-hub
+    working_dir: /app
+    volumes:
+      - ./card-arena-ui:/app
+    ports:
+      - "3000:3000"
+    command: sh -c "npm install && node server.js"
+    environment:
+      - PORT=3000
+
+  lavni:
+    image: node:18-alpine
+    container_name: 7-lavni-server
+    working_dir: /app
+    volumes:
+      - ./7 lavni:/app
+    ports:
+      - "3001:3001"
+    command: sh -c "npm install && node server/server.js"
+    environment:
+      - PORT=3001
+
+  game28:
+    image: node:18-alpine
+    container_name: 28-point-game
+    working_dir: /app
+    volumes:
+      - ./28 point game:/app
+    ports:
+      - "3002:3002"
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0 --port 3002"
+    environment:
+      - PORT=3002

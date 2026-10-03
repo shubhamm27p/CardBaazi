@@ -67,9 +67,9 @@ export const GameTable: React.FC = () => {
       { name: string; roleName: string; position: 'south' | 'east' | 'north' | 'west'; team: 'TEAM_A' | 'TEAM_B' }
     > = {
       player1: { name: 'You', roleName: 'You (Human Player)', position: 'south', team: 'TEAM_A' },
-      player2: { name: 'Vikram', roleName: 'Vikram (AI Opponent 1)', position: 'east', team: 'TEAM_B' },
-      player3: { name: 'Arjun', roleName: 'Arjun (AI Partner)', position: 'north', team: 'TEAM_A' },
-      player4: { name: 'Rajesh', roleName: 'Rajesh (AI Opponent 2)', position: 'west', team: 'TEAM_B' },
+      player2: { name: PLAYERS.find(p => p.id === 'player2')!.name, roleName: PLAYERS.find(p => p.id === 'player2')!.roleName, position: 'east', team: 'TEAM_B' },
+      player3: { name: PLAYERS.find(p => p.id === 'player3')!.name, roleName: PLAYERS.find(p => p.id === 'player3')!.roleName, position: 'north', team: 'TEAM_A' },
+      player4: { name: PLAYERS.find(p => p.id === 'player4')!.name, roleName: PLAYERS.find(p => p.id === 'player4')!.roleName, position: 'west', team: 'TEAM_B' },
     };
     return map;
   }, []);
@@ -410,7 +410,7 @@ export const GameTable: React.FC = () => {
       {/* Match History & Hand Logs Modal */}
       {(isMatchHistoryOpen || gameState.isMatchHistoryOpen) && (
         <MatchHistoryModal
-          history={gameState.matchHistory}
+          gameState={gameState}
           playersMap={playersMap}
           onClose={() => {
             setIsMatchHistoryOpen(false);

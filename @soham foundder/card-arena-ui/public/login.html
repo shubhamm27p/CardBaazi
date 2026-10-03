@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Arena - Login</title>
+    <!-- Modern Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/login.css">
+    
+    <!-- Clerk Authentication SDK -->
+    <script
+      async
+      crossorigin="anonymous"
+      data-clerk-publishable-key="pk_test_c2Vuc2libGUtdG91Y2FuLTY0MjguY2xlcmsuYWNjb3VudHMuZGV2JA"
+      src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@4/dist/clerk.browser.js"
+    ></script>
+</head>
+<body>
+    <!-- Immersive Background Animation -->
+    <div class="background-animation">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+
+    <!-- Playing Card Login Container -->
+    <div class="login-container playing-card">
+        <!-- Top left index -->
+        <div class="card-index top-left">
+            <span class="rank">A</span>
+            <span class="suit">&spades;</span>
+        </div>
+        
+        <!-- Bottom right index -->
+        <div class="card-index bottom-right">
+            <span class="rank">A</span>
+            <span class="suit">&spades;</span>
+        </div>
+
+        <div class="card-inner-border">
+            <div class="logo-wrapper">
+                <h1 class="logo-text">CARD <span>ARENA</span></h1>
+                <p class="subtitle">Enter the battleground</p>
+            </div>
+            
+            <!-- Clerk Sign-In Component mounts here -->
+            <div id="sign-in"></div>
+        </div>
+    </div>
+
+    <!-- Clerk Auth Logic -->
+    <script src="js/auth.js" type="module"></script>
+    <script>
+        // Aggressively remove the "Secured by Clerk" badge
+        const observer = new MutationObserver((mutations) => {
+            document.querySelectorAll('a[href*="clerk.com"]').forEach(el => {
+                const parent = el.parentElement;
+                if (parent && parent.tagName === 'DIV') {
+                    parent.style.display = 'none';
+                    parent.remove();
+                }
+                el.style.display = 'none';
+                el.remove();
+            });
+            document.querySelectorAll('.cl-internal-b3al4t, .cl-watermark').forEach(el => el.remove());
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+        
+        // Interactive 3D Card Tilt Effect
+        document.addEventListener('DOMContentLoaded', () => {
+            const card = document.querySelector('.login-container.playing-card');
+            
+            // Only apply tilt after entrance animation finishes
+            setTimeout(() => {
+                document.addEventListener('mousemove', (e) => {
+                    if (!card) return;
+                    
+                    const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+                    const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+                    
+                    card.style.transform = `perspective(2000px) rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+                });
+
+                // Reset on mouse leave window
+                document.addEventListener('mouseleave', () => {
+                    if(card) card.style.transform = `perspective(2000px) rotateY(0deg) rotateX(0deg)`;
+                });
+            }, 1500); // Wait for flipIn animation to complete
+        });
+    </script>
+</body>
+</html>

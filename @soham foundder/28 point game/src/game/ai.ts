@@ -356,12 +356,7 @@ export function shouldAiRevealHukum(
  * 3. Ace (3rd priority: 1 pt, 3rd highest card)
  * 4. Ten (4th priority: 1 pt, 4th highest card)
  */
-const AI_ROLE_NAMES: Record<PlayerId, string> = {
-  player1: 'You (Human)',
-  player2: 'Vikram (Opponent 1)',
-  player3: 'Arjun (Partner)',
-  player4: 'Rajesh (Opponent 2)',
-};
+
 
 export interface AiDecisionResult {
   card: Card;
@@ -790,7 +785,7 @@ export function getAiCardDecisionWithExplanation(
 
   const explanation: AiExplanationData = {
     playerId: aiPlayerId,
-    playerName: AI_ROLE_NAMES[aiPlayerId] || aiPlayerId,
+    playerName: aiPlayerId,
     handStrength: handEvaluation.level,
     currentBid,
     trumpSuit: hukum.suit,

@@ -131,7 +131,7 @@ Reason: ${explanation.reason}`}
               <span className="ai-empty-icon">⏳</span>
               <h3>No AI Turn Played Yet This Hand</h3>
               <p>
-                As soon as an AI player (Arjun, Vikram, or Rajesh) makes a move in the trick phase,
+                As soon as an AI player makes a move in the trick phase,
                 their complete hand evaluation, legal card options, expected trick points, and
                 strategic reasoning will be displayed here!
               </p>

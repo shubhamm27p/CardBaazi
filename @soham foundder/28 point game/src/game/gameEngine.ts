@@ -32,7 +32,7 @@ import {
   initBidding,
   PLAYERS_ORDER,
 } from './bidding';
-import { createDeck, sortCards } from './cards';
+import { createDeck, sortCards, getSuitSymbol } from './cards';
 import { dealFirstFourCards, dealRemainingFourCards, shuffleDeck } from './deck';
 import {
   calculateHukumKQBidReduction,
@@ -132,6 +132,7 @@ export interface FullGameState {
   isMatchHistoryOpen: boolean;
   kqRuleConfig: KQRuleConfig;
   latestKqCelebration: KQCombinationRecord | null;
+  eventLog: { time: string, message: string }[];
 }
 
 export function createInitialGameState(): FullGameState {
@@ -179,6 +180,7 @@ export function createInitialGameState(): FullGameState {
     isMatchHistoryOpen: false,
     kqRuleConfig: { ...DEFAULT_KQ_CONFIG },
     latestKqCelebration: null,
+    eventLog: [],
   };
 }
 
@@ -502,6 +504,7 @@ export class TwentyEightGame {
       actionMessage: `Hukum locked by ${declarerName}! 4 more cards dealt (8 cards each). Trick 1 begins! ${this.getPlayerName(
         firstLeader
       )} leads.`,
+      eventLog: [{ time: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit' }), message: `Contract set: ${originalBid}` }, ...this.state.eventLog],
     };
 
     this.notify();
@@ -602,6 +605,7 @@ export class TwentyEightGame {
         lastTrickWinner: winner.winnerPlayerId,
         actionMessage: `${winnerName} wins Trick ${updatedTrick.number} with ${winner.winningCard.rank}${winner.winningCard.suit[0]} (+${updatedTrick.points} pts)!`,
         justRevealedHukumThisTurn: false,
+        eventLog: [{ time: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit' }), message: `${this.getPlayerName(playerId)} played ${card.rank}${getSuitSymbol(card.suit)}` }, ...this.state.eventLog],
       };
 
       this.notify();
@@ -624,6 +628,7 @@ export class TwentyEightGame {
       )}`,
       justRevealedHukumThisTurn: false,
       humanSkippedRevealThisTrick: false,
+      eventLog: [{ time: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit' }), message: `${this.getPlayerName(playerId)} played ${card.rank}${getSuitSymbol(card.suit)}` }, ...this.state.eventLog],
     };
 
     this.notify();
@@ -748,6 +753,7 @@ export class TwentyEightGame {
       humanSkippedRevealThisTrick: false,
       justRevealedHukumThisTurn: true,
       actionMessage: `🎺 HUKUM REVEALED! ${playerName} revealed Hukum: ${updatedHukum.suit}!${kqMsg}`,
+      eventLog: [{ time: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit' }), message: `Trump revealed: ${getSuitSymbol(updatedHukum.suit)}` }, ...this.state.eventLog],
       aiSpeechBubbles:
         byPlayerId !== 'player1'
           ? {
@@ -847,6 +853,8 @@ export class TwentyEightGame {
         this.state.completedTricks
       );
 
+      explanation.playerName = this.getPlayerName(aiId);
+
       this.state = {
         ...this.state,
         latestAiExplanation: explanation,
@@ -887,8 +895,12 @@ export class TwentyEightGame {
       kqMsg = ` 👑 KING + QUEEN! ${teamLabel} completed ${newlyCompletedKq.suit} (+${newlyCompletedKq.bonusPoints} bonus pts)!`;
     }
 
+    const trickWinnerTeam = getPlayerTeam(winner) === 'TEAM_A' ? 'Team 1' : 'Team 2';
+    const trickWonEvent = { time: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit' }), message: `Trick won by ${trickWinnerTeam}` };
+
     // Check if this was trick 8 (Hand Over!)
     if (newCompletedTricks.length === 8) {
+      this.state = { ...this.state, eventLog: [trickWonEvent, ...this.state.eventLog] };
       this.finalizeHand(newCompletedTricks);
       return;
     }
@@ -915,6 +927,7 @@ export class TwentyEightGame {
       actionMessage: `Trick ${completedTrick.number} complete. ${this.getPlayerName(
         winner
       )} leads Trick ${nextTrickNumber}.${kqMsg}`,
+      eventLog: [trickWonEvent, ...this.state.eventLog],
     };
 
     this.notify();
@@ -1085,6 +1098,7 @@ export class TwentyEightGame {
       kqAdjustment: adjustment,
       showKQRevealNotification: true,
       actionMessage: `👑 TRUMP KING + QUEEN REVEALED by ${playerName} (${teamLabel})! Team Bid: ${originalBid} | Adjustment: ${adjustment} | Final Team Points: ${finalBid}`,
+      eventLog: [{ time: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit' }), message: `👑 KING + QUEEN\nTrump: ${getSuitSymbol(this.state.hukum.suit)}\nPlayer: ${playerName}\nCards: K${getSuitSymbol(this.state.hukum.suit)} + Q${getSuitSymbol(this.state.hukum.suit)}\nOriginal Contract: ${originalBid}\nAdjusted Contract: ${finalBid}` }, ...this.state.eventLog],
       aiSpeechBubbles: {
         ...this.state.aiSpeechBubbles,
         [playerId]: '👑 Revealed Trump King + Queen!',

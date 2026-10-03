@@ -1,0 +1,259 @@
+:root {
+    --bg-dark: #f8fafc; /* Changed to light background */
+    --accent-primary: #3b82f6;
+    --accent-secondary: #8b5cf6;
+    --text-primary: #0f172a; /* Dark text for light mode */
+    --text-secondary: #475569;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(0, 0, 0, 0.1);
+    --glass-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Dynamic Background Orbs */
+.background-animation {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.glow-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.5;
+    animation: float 20s infinite alternate ease-in-out;
+}
+
+.orb-1 {
+    width: 400px;
+    height: 400px;
+    background: var(--accent-primary);
+    top: -100px;
+    left: -100px;
+    animation-delay: 0s;
+}
+
+.orb-2 {
+    width: 500px;
+    height: 500px;
+    background: var(--accent-secondary);
+    bottom: -150px;
+    right: -100px;
+    animation-delay: -5s;
+}
+
+.orb-3 {
+    width: 300px;
+    height: 300px;
+    background: #ec4899;
+    top: 40%;
+    left: 40%;
+    animation-delay: -10s;
+    opacity: 0.3;
+}
+
+@keyframes float {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(50px, 50px) scale(1.1); }
+    100% { transform: translate(-50px, 100px) scale(0.9); }
+}
+
+/* Playing Card Container */
+.login-container.playing-card {
+    position: relative;
+    z-index: 10;
+    background: #ffffff; /* Solid white for playing card feel */
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 3rem 2.5rem 2.5rem 2.5rem; /* Increased padding so indices fit */
+    width: 100%;
+    max-width: 480px; /* Increased to fit Clerk card without overflow */
+    min-height: 640px; /* Force an aspect ratio similar to a playing card */
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    transform-origin: center center;
+    opacity: 0;
+    animation: flipIn 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.1) forwards;
+    transition: transform 0.1s linear; /* For mousemove tilt */
+}
+
+@keyframes flipIn {
+    0% { 
+        transform: perspective(2000px) rotateY(-180deg) translateZ(-200px); 
+        opacity: 0; 
+        box-shadow: 0 0 0 rgba(0,0,0,0);
+    }
+    40% {
+        opacity: 1;
+        box-shadow: 25px 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+    100% { 
+        transform: perspective(2000px) rotateY(0deg) translateZ(0); 
+        opacity: 1; 
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0,0,0,0.05);
+    }
+}
+
+.card-inner-border {
+    border: 2px solid rgba(212, 175, 55, 0.3); /* Gold inner border */
+    border-radius: 12px;
+    padding: 2rem 1.5rem; /* Better padding for inner content */
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    width: 100%; /* Ensure it spans the container */
+    background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(248,250,252,0.5) 100%);
+}
+
+/* Card Indices (A Spade) */
+.card-index {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+    font-weight: 800;
+    font-size: 24px; /* Slightly scaled down to fit */
+    font-family: 'Cinzel', serif, sans-serif;
+    color: #1a1a24;
+}
+
+.card-index.top-left {
+    top: 20px;
+    left: 20px;
+}
+
+.card-index.bottom-right {
+    bottom: 20px;
+    right: 20px;
+    transform: rotate(180deg);
+}
+
+.card-index .suit {
+    font-size: 32px;
+    margin-top: 2px;
+}
+
+.card-index .text-gold {
+    color: #D4AF37;
+}
+
+@keyframes slideUpFade {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.logo-wrapper {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.logo-text {
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 0.5rem;
+}
+
+.logo-text span {
+    color: transparent;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+/* Clerk UI Custom Overrides */
+#sign-in {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.cl-rootBox {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.cl-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.cl-headerTitle, .cl-headerSubtitle {
+    display: none !important; /* We use our own header */
+}
+
+/* Hide Clerk Watermark completely */
+.cl-watermark,
+.cl-internal-b3al4t,
+[class*="cl-internal-"][class*="watermark"],
+a[href*="clerk.com"],
+div.cl-footerActionLink {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+}
+
+/* Hide any parent container of the clerk link */
+div:has(> a[href*="clerk.com"]) {
+    display: none !important;
+}
+.cl-formButtonPrimary {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)) !important;
+    border: none !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.cl-formButtonPrimary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -10px rgba(139, 92, 246, 0.5) !important;
+}
+
+.cl-internal-b3al4t {
+    color: var(--text-primary) !important;
+}

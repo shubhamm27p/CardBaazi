@@ -49,11 +49,9 @@ export const TrickHistoryModal: React.FC<TrickHistoryModalProps> = ({
                         <span className="trick-history-winner-tag">
                           Won by {winner.name} {winner.team ? `(${winner.team === 'TEAM_A' ? 'Team A' : 'Team B'})` : ''}
                         </span>
-                        {trick.points > 0 && (
-                          <span className="trick-history-points-tag">
-                            ★ +{trick.points} PTS
-                          </span>
-                        )}
+                        <span className="trick-history-points-tag" style={{ background: 'rgba(245, 158, 11, 0.1)', padding: '2px 6px', borderRadius: '4px', fontSize: '0.85rem' }}>
+                          ★ +{trick.points} PTS
+                        </span>
                       </div>
                     )}
                   </div>
@@ -68,7 +66,7 @@ export const TrickHistoryModal: React.FC<TrickHistoryModalProps> = ({
                           </span>
                           <Card
                             card={p.card}
-                            size="small"
+                            size="sm"
                             isWinning={isWinningCard}
                           />
                         </div>

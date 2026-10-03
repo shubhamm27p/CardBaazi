@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Card Arena</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>CARD <span>ARENA</span></h2>
+                <p>Admin Portal</p>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-target="dashboard-view">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                    Dashboard
+                </button>
+                <button class="nav-item" data-target="users-view">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    Users
+                </button>
+                <button class="nav-item" data-target="games-view">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Active Games
+                </button>
+                <button class="nav-item" data-target="settings-view">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    Settings
+                </button>
+                <button class="nav-item" data-target="content-view">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+                    Content Mgmt
+                </button>
+                <button class="nav-item" data-target="coin-exchange-view">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Coin Exchange
+                </button>
+                <button class="nav-item" data-target="notifications-view">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                    Notifications
+                </button>
+                <button class="nav-item" data-target="reports-view">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    Reports & Exports
+                </button>
+                <button class="nav-item" data-target="roles-view">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    Roles & Permissions
+                </button>
+                <button class="nav-item" data-target="orders-view">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    Orders & Booking
+                </button>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="logout-btn">Log Out</button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Topbar -->
+            <header class="topbar">
+                <h1 id="page-title">Dashboard</h1>
+                <div class="admin-profile">
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=3b82f6&color=fff" alt="Admin Avatar">
+                    <span>Super Admin</span>
+                </div>
+            </header>
+
+            <!-- Dashboard View -->
+            <section id="dashboard-view" class="view-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-title">Total Users</div>
+                        <div class="stat-value" id="stat-users">1,245</div>
+                        <div class="stat-trend positive">↑ 12% from last week</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">Active Players</div>
+                        <div class="stat-value" id="stat-active">342</div>
+                        <div class="stat-trend positive">↑ 5% from yesterday</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">Active Rooms</div>
+                        <div class="stat-value" id="stat-rooms">48</div>
+                        <div class="stat-trend neutral">- Stable</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">Total Revenue (Coins)</div>
+                        <div class="stat-value" id="stat-revenue">2.4M</div>
+                        <div class="stat-trend positive">↑ 8% from last week</div>
+                    </div>
+                </div>
+
+                <div class="recent-activity-container">
+                    <div class="panel">
+                        <h2>Recent Transactions</h2>
+                        <ul class="activity-list" id="recent-transactions">
+                            <!-- Populated by JS -->
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Users Management View -->
+            <section id="users-view" class="view-section">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>User Management</h2>
+                        <div class="search-bar">
+                            <input type="text" placeholder="Search users by name or ID...">
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Coins Balance</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table-body">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Active Games View -->
+            <section id="games-view" class="view-section">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>Active Game Rooms</h2>
+                        <button class="btn btn-primary">Refresh Rooms</button>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Room ID</th>
+                                    <th>Game Type</th>
+                                    <th>Players</th>
+                                    <th>Stakes</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="games-table-body">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings View -->
+            <section id="settings-view" class="view-section">
+                <div class="panel">
+                    <h2>Global Game Settings</h2>
+                    <form class="settings-form" id="settings-form">
+                        <div class="form-group">
+                            <label>Default Starting Coins</label>
+                            <input type="number" value="1000">
+                        </div>
+                        <div class="form-group">
+                            <label>Platform Rake/Fee (%)</label>
+                            <input type="number" step="0.1" value="2.5">
+                        </div>
+                        <div class="form-group">
+                            <label>Daily Login Reward (Coins)</label>
+                            <input type="number" value="50" id="setting-daily-reward">
+                        </div>
+                        <div class="form-group">
+                            <label>Maintenance Mode</label>
+                            <select>
+                                <option value="off">Off</option>
+                                <option value="on">On (Block new logins)</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Settings</button>
+                    </form>
+                </div>
+            </section>
+            <!-- Content Management View -->
+            <section id="content-view" class="view-section">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>Content Management</h2>
+                        <button class="btn btn-primary">Create New Post</button>
+                    </div>
+                    <p style="color: var(--text-muted); margin-bottom: 20px;">Manage news, banners, announcements, and help articles displayed to players.</p>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Date Published</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="5" style="text-align:center; color: var(--text-muted); padding: 20px;">No content found.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Coin Exchange View -->
+            <section id="coin-exchange-view" class="view-section">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>Coin Exchange Rates & Requests</h2>
+                    </div>
+                    <div class="stats-grid" style="margin-bottom: 20px;">
+                        <div class="stat-card">
+                            <div class="stat-title">Current Rate (USD to Coins)</div>
+                            <div class="stat-value">1 USD = 100 🪙</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-title">Pending Withdrawal Requests</div>
+                            <div class="stat-value">12</div>
+                        </div>
+                    </div>
+                    <h3>Recent Exchange Requests</h3>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Req ID</th>
+                                    <th>User</th>
+                                    <th>Amount (Coins)</th>
+                                    <th>Requested USD</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="6" style="text-align:center; color: var(--text-muted); padding: 20px;">No pending requests.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Notifications View -->
+            <section id="notifications-view" class="view-section">
+                <div class="panel">
+                    <h2>Send Global Notifications</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 20px;">Push a notification or alert to all active users on the platform.</p>
+                    <form class="settings-form" onsubmit="event.preventDefault(); alert('Notification Sent!');">
+                        <div class="form-group">
+                            <label>Notification Title</label>
+                            <input type="text" placeholder="e.g. Server Maintenance in 1 Hour" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Message Body</label>
+                            <textarea rows="4" style="width:100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px;" placeholder="Type your message here..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Notification Type</label>
+                            <select>
+                                <option value="info">Info (Blue)</option>
+                                <option value="warning">Warning (Yellow)</option>
+                                <option value="alert">Critical Alert (Red)</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send to All Users</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Reports and Exports View -->
+            <section id="reports-view" class="view-section">
+                <div class="panel">
+                    <h2>Generate Reports & Exports</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 20px;">Export platform data as CSV or PDF for accounting and analysis.</p>
+                    <div class="stats-grid">
+                        <div class="stat-card" style="text-align: center;">
+                            <h3 style="margin-bottom: 10px;">Financial Report</h3>
+                            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Monthly revenue, rakes, and payouts.</p>
+                            <button class="btn btn-outline" style="width: 100%;">Export CSV</button>
+                        </div>
+                        <div class="stat-card" style="text-align: center;">
+                            <h3 style="margin-bottom: 10px;">User Activity</h3>
+                            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Login counts, game durations, retention.</p>
+                            <button class="btn btn-outline" style="width: 100%;">Export PDF</button>
+                        </div>
+                        <div class="stat-card" style="text-align: center;">
+                            <h3 style="margin-bottom: 10px;">Audit Logs</h3>
+                            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Admin actions, role changes, system errors.</p>
+                            <button class="btn btn-outline" style="width: 100%;">Export CSV</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Roles and Permissions View -->
+            <section id="roles-view" class="view-section">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>Role & Permission Management</h2>
+                        <button class="btn btn-primary">Create New Role</button>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Role Name</th>
+                                    <th>Assigned Users</th>
+                                    <th>Capabilities</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Super Admin</strong></td>
+                                    <td>1</td>
+                                    <td>All Access</td>
+                                    <td><button class="btn btn-sm btn-outline" disabled>System</button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Moderator</strong></td>
+                                    <td>3</td>
+                                    <td>Ban Users, View Reports, Send Notifications</td>
+                                    <td><button class="btn btn-sm btn-outline">Edit</button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Support Staff</strong></td>
+                                    <td>5</td>
+                                    <td>View Users, View Orders</td>
+                                    <td><button class="btn btn-sm btn-outline">Edit</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Order & Booking Management View -->
+            <section id="orders-view" class="view-section">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>Order & Booking Management</h2>
+                        <div class="search-bar">
+                            <input type="text" placeholder="Search orders by ID...">
+                        </div>
+                    </div>
+                    <p style="color: var(--text-muted); margin-bottom: 20px;">Track in-game shop purchases, special event bookings, and premium subscriptions.</p>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>User</th>
+                                    <th>Item/Booking</th>
+                                    <th>Total Cost</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="6" style="text-align:center; color: var(--text-muted); padding: 20px;">No recent orders.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>

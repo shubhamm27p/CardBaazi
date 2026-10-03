@@ -67,8 +67,8 @@ export const ScoreBoard: React.FC<ScoreBoardProps> = ({
         {/* Team A */}
         <div className={`team-score-card team-a-card ${isTeamABidder ? 'bidding-team-card' : ''}`}>
           <div className="team-meta">
-            <span className="team-name-title">Team A {isTeamABidder ? '(Bidding)' : ''}</span>
-            <span className="team-roster">You + Arjun</span>
+            <span className="team-name-title">Team 1 {isTeamABidder ? '(Bidding)' : ''}</span>
+            <span className="team-roster">{playersMap['player1']?.name || 'You'} + {playersMap['player3']?.name || 'Partner'}</span>
             <span className="match-pts-val">{matchScore.teamAMatchPoints} Match</span>
             {isTeamABidder && finalBid > 0 && (
               <span className="team-target-badge" title={hukumKingQueenValid && originalBid ? `Original Bid ${originalBid} ${adjText} = ${finalBid}` : `Target: ${finalBid} points`}>
@@ -123,8 +123,8 @@ export const ScoreBoard: React.FC<ScoreBoardProps> = ({
         {/* Team B */}
         <div className={`team-score-card team-b-card ${isTeamBBidder ? 'bidding-team-card' : ''}`}>
           <div className="team-meta">
-            <span className="team-name-title">Team B {isTeamBBidder ? '(Bidding)' : ''}</span>
-            <span className="team-roster">Vikram + Rajesh</span>
+            <span className="team-name-title">Team 2 {isTeamBBidder ? '(Bidding)' : ''}</span>
+            <span className="team-roster">{playersMap['player2']?.name || 'Opp 1'} + {playersMap['player4']?.name || 'Opp 2'}</span>
             <span className="match-pts-val">{matchScore.teamBMatchPoints} Match</span>
             {isTeamBBidder && finalBid > 0 && (
               <span className="team-target-badge" title={hukumKingQueenValid && originalBid ? `Original Bid ${originalBid} ${adjText} = ${finalBid}` : `Target: ${finalBid} points`}>
