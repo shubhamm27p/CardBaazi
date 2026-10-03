@@ -75,11 +75,18 @@ app.use('/10-lavani', express.static(path.join(__dirname, '../10 lavani/dist')))
 // Proxy or Redirect 28 point game
 app.use('/play-28', (req, res, next) => {
   // If GAME28_URL is a production domain (like vercel), redirect directly to it
-  if (GAME28_URL.includes('vercel.app') || process.env.NODE_ENV === 'production') {
+  if (GAME28_URL.includes('vercel.app')) {
     return res.redirect(GAME28_URL);
   }
   
-  // Otherwise, proxy it for local development
+  // If running as a monolith, serve the built static files instead of proxying!
+  if (process.env.MONOLITH_MODE === 'true') {
+    // We rewrite the URL to strip /play-28/ for static serving
+    req.url = req.url.replace(/^\/play-28/, '') || '/';
+    return express.static(path.join(__dirname, '../28 point game/dist'))(req, res, next);
+  }
+  
+  // Otherwise, proxy it for local development (npm run dev)
   createProxyMiddleware({ 
     target: GAME28_URL, 
     changeOrigin: true,
