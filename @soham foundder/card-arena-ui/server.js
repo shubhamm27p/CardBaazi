@@ -48,16 +48,20 @@ app.use((req, res, next) => {
   next();
 });
 
-// Proxy 7 lavni to its running backend on 3001
+// Get production URLs from environment (or default to local dev ports)
+const LAVNI_URL = process.env.LAVNI_URL || 'http://localhost:3001';
+const GAME28_URL = process.env.GAME28_URL || 'http://localhost:3002';
+
+// Proxy 7 lavni to its backend
 app.use('/7-lavni', createProxyMiddleware({ 
-  target: 'http://localhost:3001', 
+  target: LAVNI_URL, 
   changeOrigin: true,
   pathRewrite: { '^/7-lavni': '' }
 }));
 
 // Proxy Socket.IO for 7 lavni
 app.use('/socket.io', createProxyMiddleware({ 
-  target: 'http://localhost:3001', 
+  target: LAVNI_URL, 
   changeOrigin: true, 
   ws: true,
   pathRewrite: {
@@ -68,15 +72,22 @@ app.use('/socket.io', createProxyMiddleware({
 // Serve 10 lavani statically
 app.use('/10-lavani', express.static(path.join(__dirname, '../10 lavani/dist')));
 
-// Proxy 28 point game to its dev server
-app.use('/play-28', createProxyMiddleware({ 
-  target: 'http://localhost:3002', 
-  changeOrigin: true,
-  pathRewrite: function (path, req) {
-    // Return original path to prevent Vite from redirecting '/' to '/play-28/'
-    return req.originalUrl;
+// Proxy or Redirect 28 point game
+app.use('/play-28', (req, res, next) => {
+  // If GAME28_URL is a production domain (like vercel), redirect directly to it
+  if (GAME28_URL.includes('vercel.app') || process.env.NODE_ENV === 'production') {
+    return res.redirect(GAME28_URL);
   }
-}));
+  
+  // Otherwise, proxy it for local development
+  createProxyMiddleware({ 
+    target: GAME28_URL, 
+    changeOrigin: true,
+    pathRewrite: function (path, req) {
+      return req.originalUrl;
+    }
+  })(req, res, next);
+});
 
 // Disable caching for the root pages to ensure auth updates propagate
 app.use((req, res, next) => {
