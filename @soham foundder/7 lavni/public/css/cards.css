@@ -6,12 +6,12 @@
   --card-height: 108px;
   --card-radius: 8px;
   
-  /* Authentic Ivory Playing Card Stock */
-  --card-bg-front: linear-gradient(168deg, #ffffff 0%, #faf8f5 50%, #f3eee3 100%);
-  --card-border-color: rgba(30, 30, 30, 0.22);
+  /* Authentic Ivory Playing Card Stock - 10 Lavani Style */
+  --card-bg-front: #ffffff;
+  --card-border-color: rgba(0, 0, 0, 0.15);
   --card-border: 1px solid var(--card-border-color);
-  --card-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), 0 1px 3px rgba(0, 0, 0, 0.2);
-  --card-inner-bevel: inset 0 0 0 1px rgba(255, 255, 255, 0.85);
+  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.14), 0 4px 10px rgba(0, 0, 0, 0.18), 0 10px 24px rgba(0, 0, 0, 0.25);
+  --card-inner-bevel: none;
 
   /* Proper High-Contrast Casino Colors (User spec: Red for H/D, Black for C/S) */
   --color-suit-red: #dc2626;
@@ -298,8 +298,8 @@
 
 /* ILLEGAL / UNPLAYABLE CARDS (User spec: slightly dimmed, no distracting animation) */
 .playing-card.is-dimmed {
-  opacity: 0.52;
-  filter: brightness(0.88) contrast(0.95);
+  /* Using brightness/contrast instead of opacity to prevent see-through overlap */
+  filter: brightness(0.65) contrast(0.95);
   cursor: not-allowed;
 }
 
