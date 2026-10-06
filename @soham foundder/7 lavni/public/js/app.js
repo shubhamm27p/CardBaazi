@@ -227,7 +227,7 @@ function getPodPositionForSeat(seatIndex) {
 
 // Socket Connection Initialization
 function initSocket() {
-  socket = io();
+  socket = io("https://cardbaazi.onrender.com");
 
   socket.on('connect', () => {
     console.log('[Socket] Connected to Sati Lavni competitive server');
