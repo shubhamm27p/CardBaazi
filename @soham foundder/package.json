@@ -2,9 +2,9 @@
   "name": "card-arena",
   "version": "1.0.0",
   "scripts": {
-    "install-all": "cd card-arena-ui && npm install && cd ../\"7 lavni\" && npm install && cd ../\"28 point game\" && npm install",
-    "build": "npm run install-all && cd \"28 point game\" && npm run build",
-    "start": "cd card-arena-ui && npx cross-env MONOLITH_MODE=true node server.js"
+    "install-all": "cd card-arena-ui && npm install && cd ../\"7 lavni\" && npm install && cd ../\"10 lavani\" && npm install && cd ../\"28 point game\" && npm install",
+    "build": "cd \"10 lavani\" && npm run build && cd ../\"28 point game\" && npm run build",
+    "start": "cd card-arena-ui && node server.js"
   },
   "dependencies": {
     "concurrently": "^8.2.2",

@@ -9,7 +9,8 @@
     "dotenv": "^18.0.5"
   },
   "scripts": {
-    "postinstall": "cd \"@soham foundder\" && npm install && npm run install-all",
+    "postinstall": "cd \"@soham foundder\" && npm install && npm run install-all && npm run build",
+    "build": "cd \"@soham foundder\" && npm run build",
     "dev": "node \"@soham foundder/start-all.js\"",
     "start": "node \"@soham foundder/start-all.js\""
   }
