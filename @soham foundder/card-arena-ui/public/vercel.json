@@ -1,24 +1,14 @@
 {
   "rewrites": [
-    {
-      "source": "/api/:match*",
-      "destination": "https://cardbaazi.onrender.com/api/:match*"
-    },
-    {
-      "source": "/socket.io/:match*",
-      "destination": "https://cardbaazi.onrender.com/socket.io/:match*"
-    },
-    {
-      "source": "/play-28/:match*",
-      "destination": "https://cardbaazi.onrender.com/play-28/:match*"
-    },
-    {
-      "source": "/7-lavni/:match*",
-      "destination": "https://cardbaazi.onrender.com/7-lavni/:match*"
-    },
-    {
-      "source": "/10-lavani/:match*",
-      "destination": "https://cardbaazi.onrender.com/10-lavani/:match*"
-    }
+    { "source": "/api/(.*)", "destination": "https://cardbaazi.onrender.com/api/$1" },
+    { "source": "/api", "destination": "https://cardbaazi.onrender.com/api" },
+    { "source": "/socket.io/(.*)", "destination": "https://cardbaazi.onrender.com/socket.io/$1" },
+    { "source": "/socket.io", "destination": "https://cardbaazi.onrender.com/socket.io" },
+    { "source": "/play-28/(.*)", "destination": "https://cardbaazi.onrender.com/play-28/$1" },
+    { "source": "/play-28", "destination": "https://cardbaazi.onrender.com/play-28" },
+    { "source": "/7-lavni/(.*)", "destination": "https://cardbaazi.onrender.com/7-lavni/$1" },
+    { "source": "/7-lavni", "destination": "https://cardbaazi.onrender.com/7-lavni" },
+    { "source": "/10-lavani/(.*)", "destination": "https://cardbaazi.onrender.com/10-lavani/$1" },
+    { "source": "/10-lavani", "destination": "https://cardbaazi.onrender.com/10-lavani" }
   ]
 }
