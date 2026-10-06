@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "Root workspace for Card Arena",
   "scripts": {
-    "dev": "node start-all.js",
-    "start": "node start-all.js"
+    "dev": "node \"@soham foundder/start-all.js\"",
+    "start": "node \"@soham foundder/start-all.js\""
   },
   "keywords": [],
   "author": "",
