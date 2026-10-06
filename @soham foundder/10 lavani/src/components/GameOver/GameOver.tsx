@@ -10,6 +10,11 @@ interface GameOverProps {
   onPlayAgain: () => void;
   onViewHistory: () => void;
   onClose: () => void;
+  coinSettlement?: {
+    changes: Record<string, number>;
+    newBalances: Record<string, number>;
+    winningTeamId: string;
+  };
 }
 
 export const GameOver: React.FC<GameOverProps> = ({
@@ -18,6 +23,7 @@ export const GameOver: React.FC<GameOverProps> = ({
   onPlayAgain,
   onViewHistory,
   onClose,
+  coinSettlement,
 }) => {
   const teamA = teamScores.teamA;
   const teamB = teamScores.teamB;
@@ -122,6 +128,38 @@ export const GameOver: React.FC<GameOverProps> = ({
             </div>
           </div>
         </div>
+
+        {coinSettlement && (
+          <div className="coin-settlement-section" style={{ background: 'rgba(0,0,0,0.4)', borderRadius: '12px', padding: '15px', marginTop: '20px', color: '#fff', fontFamily: 'monospace' }}>
+            <h3 style={{ textAlign: 'center', color: '#F9D976', textTransform: 'uppercase', letterSpacing: '2px', margin: '0 0 15px 0' }}>
+              Coin Settlement
+            </h3>
+            
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '15px' }}>
+              <div style={{ width: '45%' }}>
+                <div style={{ marginBottom: '5px' }}>
+                  Player 1 <span style={{ color: coinSettlement.changes.p1 >= 0 ? '#4CAF50' : '#F44336' }}>{coinSettlement.changes.p1 >= 0 ? '+' : ''}{coinSettlement.changes.p1}</span> &rarr; 🪙 {coinSettlement.newBalances.p1}
+                </div>
+                <div style={{ marginBottom: '5px' }}>
+                  Player 3 <span style={{ color: coinSettlement.changes.p3 >= 0 ? '#4CAF50' : '#F44336' }}>{coinSettlement.changes.p3 >= 0 ? '+' : ''}{coinSettlement.changes.p3}</span> &rarr; 🪙 {coinSettlement.newBalances.p3}
+                </div>
+              </div>
+
+              <div style={{ width: '45%', textAlign: 'right' }}>
+                <div style={{ marginBottom: '5px' }}>
+                  Player 2 <span style={{ color: coinSettlement.changes.p2 >= 0 ? '#4CAF50' : '#F44336' }}>{coinSettlement.changes.p2 >= 0 ? '+' : ''}{coinSettlement.changes.p2}</span> &rarr; 🪙 {coinSettlement.newBalances.p2}
+                </div>
+                <div style={{ marginBottom: '5px' }}>
+                  Player 4 <span style={{ color: coinSettlement.changes.p4 >= 0 ? '#4CAF50' : '#F44336' }}>{coinSettlement.changes.p4 >= 0 ? '+' : ''}{coinSettlement.changes.p4}</span> &rarr; 🪙 {coinSettlement.newBalances.p4}
+                </div>
+              </div>
+            </div>
+
+            <div style={{ textAlign: 'center', borderTop: '1px solid rgba(255,255,255,0.2)', paddingTop: '10px', color: '#aaa' }}>
+              TOTAL COINS: 🪙 400
+            </div>
+          </div>
+        )}
 
         <div className="game-over-actions">
           <button

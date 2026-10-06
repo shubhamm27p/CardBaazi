@@ -1,7 +1,7 @@
 // Socket.IO Multiplayer End-to-End Test for Sati Lavni
 import { io } from 'socket.io-client';
 
-const SERVER_URL = 'http://localhost:3000';
+const SERVER_URL = process.env.SERVER_URL || process.env.APP_URL || 'http://localhost:3000';
 
 async function runSocketTest() {
   console.log('--- Starting Sati Lavni Socket.IO Multiplayer Test ---');

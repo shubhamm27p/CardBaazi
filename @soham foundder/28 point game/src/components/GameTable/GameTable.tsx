@@ -230,6 +230,7 @@ export const GameTable: React.FC = () => {
             isCurrentTurn={gameState.currentTurn === 'player3'}
             isDealer={gameState.dealer === 'player3'}
             actionMessage={getAiActionText('player3')}
+            coins={gameState.playerCoins.player3}
           />
 
           {/* West Player (Rajesh - AI Opponent 2) ALWAYS AT LEFT */}
@@ -239,6 +240,7 @@ export const GameTable: React.FC = () => {
             isCurrentTurn={gameState.currentTurn === 'player4'}
             isDealer={gameState.dealer === 'player4'}
             actionMessage={getAiActionText('player4')}
+            coins={gameState.playerCoins.player4}
           />
 
           {/* East Player (Vikram - AI Opponent 1) ALWAYS AT RIGHT */}
@@ -248,6 +250,7 @@ export const GameTable: React.FC = () => {
             isCurrentTurn={gameState.currentTurn === 'player2'}
             isDealer={gameState.dealer === 'player2'}
             actionMessage={getAiActionText('player2')}
+            coins={gameState.playerCoins.player2}
           />
 
           {/* Center Table Area (Hukum Slot + Radial Trick Area) */}
@@ -296,6 +299,7 @@ export const GameTable: React.FC = () => {
             onSkipRevealHukum={handleSkipReveal}
             canRevealKQ={canHumanRevealKQ}
             onRevealKQ={() => gameEngine.revealTrumpKingQueen('player1')}
+            coins={gameState.playerCoins.player1}
           />
         </div>
       </main>

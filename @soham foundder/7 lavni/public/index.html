@@ -112,6 +112,7 @@
               <span id="name-top" class="player-name">Player Top</span>
               <div class="player-meta">
                 <span class="card-count-pill" id="cards-top">13 cards</span>
+                <span class="coin-count-pill" style="background: rgba(212,175,55,0.2); color: #facc15; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700;">🪙 <span id="coins-top">100</span></span>
                 <span id="status-top"></span>
               </div>
               <div class="danger-indicator" id="danger-top">⚠️ DANGER: 2 CARDS</div>
@@ -136,6 +137,7 @@
                 <span id="name-left" class="player-name">Player Left</span>
                 <div class="player-meta">
                   <span class="card-count-pill" id="cards-left">13 cards</span>
+                  <span class="coin-count-pill" style="background: rgba(212,175,55,0.2); color: #facc15; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700;">🪙 <span id="coins-left">100</span></span>
                   <span id="status-left"></span>
                 </div>
                 <div class="danger-indicator" id="danger-left">⚠️ DANGER: 2 CARDS</div>
@@ -197,6 +199,7 @@
                 <span id="name-right" class="player-name">Player Right</span>
                 <div class="player-meta">
                   <span class="card-count-pill" id="cards-right">13 cards</span>
+                  <span class="coin-count-pill" style="background: rgba(212,175,55,0.2); color: #facc15; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700;">🪙 <span id="coins-right">100</span></span>
                   <span id="status-right"></span>
                 </div>
                 <div class="danger-indicator" id="danger-right">⚠️ DANGER: 2 CARDS</div>
@@ -249,7 +252,10 @@
               </div>
               <div class="player-info">
                 <span id="name-bottom" class="player-name">You</span>
-                <span class="player-role-tag">PLAYER 1</span>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                  <span class="player-role-tag">PLAYER 1</span>
+                  <span class="coin-count-pill" style="background: rgba(212,175,55,0.2); color: #facc15; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700;">🪙 <span id="coins-bottom">100</span></span>
+                </div>
               </div>
             </div>
 
@@ -433,7 +439,9 @@
         </tbody>
       </table>
 
-      <button id="btn-play-again" class="btn-primary" style="width: 100%; justify-content: center;">
+      <div id="coin-settlement-container"></div>
+
+      <button id="btn-play-again" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 15px;">
         <span>🔄</span> Play Again
       </button>
     </div>

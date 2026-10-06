@@ -15,14 +15,49 @@ dotenv.config({ path: path.join(__dirname, '../.env') });
 
 const app = express();
 const httpServer = createServer(app);
-const io = new Server(httpServer, {
-  cors: { origin: '*', methods: ['GET', 'POST'] }
-});
+const appUrl = process.env.APP_URL || process.env.PUBLIC_APP_URL || 'http://localhost:3000';
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || `${appUrl},http://localhost:3001,http://localhost:5173`).split(',').map((origin) => origin.trim()).filter(Boolean);
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+      return;
+    }
+    callback(new Error('Origin not allowed by CORS policy'));
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+
+const io = new Server(httpServer, { cors: corsOptions });
 
 const PORT = process.env.PORT || 3000;
 const roomManager = new RoomManager(io);
 
-app.use(express.json());
+app.disable('x-powered-by');
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('X-XSS-Protection', '0');
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(204);
+    return;
+  }
+  next();
+});
+
+app.use(express.json({ limit: '1mb' }));
+
+const requireAdmin = (req, res, next) => {
+  const role = req.user?.role || req.user?.user_metadata?.role || req.user?.app_metadata?.role || req.user?.admin;
+  if (role !== 'admin' && role !== 'superadmin') {
+    return res.status(403).json({ error: 'Admin access required' });
+  }
+  next();
+};
 
 // JWT Verification Middleware
 const verifySupabaseJWT = (req, res, next) => {
@@ -32,20 +67,23 @@ const verifySupabaseJWT = (req, res, next) => {
   }
 
   const token = authHeader.split(' ')[1];
-  const jwtSecret = process.env.SUPABASE_JWT_SECRET;
+  const jwtSecret = process.env.SUPABASE_JWT_SECRET || process.env.JWT_SECRET;
 
   if (!jwtSecret) {
-    console.error('SUPABASE_JWT_SECRET is missing from .env');
+    console.error('JWT secret is missing from .env');
     return res.status(500).json({ error: 'Server configuration error' });
   }
 
-  jwt.verify(token, jwtSecret, (err, decoded) => {
-    if (err) {
-      return res.status(403).json({ error: 'Invalid or expired token' });
-    }
+  try {
+    const decoded = jwt.verify(token, jwtSecret, {
+      algorithms: ['HS256'],
+      ignoreExpiration: false
+    });
     req.user = decoded;
     next();
-  });
+  } catch (err) {
+    return res.status(403).json({ error: 'Invalid or expired token' });
+  }
 };
 
 app.get('/api/protected-data', verifySupabaseJWT, (req, res) => {
@@ -53,20 +91,25 @@ app.get('/api/protected-data', verifySupabaseJWT, (req, res) => {
 });
 
 // Admin endpoint to fetch Clerk users
-app.get('/api/admin/users', async (req, res) => {
+app.get('/api/admin/users', verifySupabaseJWT, requireAdmin, async (req, res) => {
   try {
+    const clerkSecretKey = process.env.CLERK_SECRET_KEY;
+    if (!clerkSecretKey) {
+      return res.status(500).json({ error: 'CLERK_SECRET_KEY is not configured' });
+    }
+
     const response = await fetch('https://api.clerk.com/v1/users', {
       headers: {
-        'Authorization': `Bearer ${process.env.CLERK_SECRET_KEY}`
+        'Authorization': `Bearer ${clerkSecretKey}`
       }
     });
     if (!response.ok) {
-        return res.status(response.status).json({ error: 'Failed to fetch from Clerk' });
+      return res.status(response.status).json({ error: 'Failed to fetch from Clerk' });
     }
     const users = await response.json();
     res.json(users);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message || 'Failed to fetch users' });
   }
 });
 

@@ -4,27 +4,50 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
 import { RoomManager } from './roomManager.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, '..');
+dotenv.config({ path: path.resolve(projectRoot, '.env') });
 
 const app = express();
 const httpServer = createServer(app);
+const appUrl = process.env.APP_URL || process.env.PUBLIC_APP_URL || 'http://localhost:3000';
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || `${appUrl},http://localhost:3001,http://localhost:5173`).split(',').map((origin) => origin.trim()).filter(Boolean);
 const io = new Server(httpServer, {
   cors: {
-    origin: '*',
-    methods: ['GET', 'POST']
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+      callback(new Error('Origin not allowed by CORS policy'));
+    },
+    methods: ['GET', 'POST'],
+    credentials: true
   }
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = Number(process.env.LAVNI_PORT || 3001);
 const roomManager = new RoomManager(io);
+
+app.disable('x-powered-by');
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(204);
+    return;
+  }
+  next();
+});
 
 // Static assets
 app.use(express.static(path.join(projectRoot, 'public')));
-app.use(express.json());
+app.use(express.json({ limit: '1mb' }));
 
 // API Endpoints
 app.get('/api/health', (req, res) => {

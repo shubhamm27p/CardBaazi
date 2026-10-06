@@ -8,6 +8,7 @@ interface AIPlayerSlotProps {
   isCurrentTurn: boolean;
   isDealer: boolean;
   actionMessage?: string;
+  coins: number;
 }
 
 export const AIPlayerSlot: React.FC<AIPlayerSlotProps> = ({
@@ -16,6 +17,7 @@ export const AIPlayerSlot: React.FC<AIPlayerSlotProps> = ({
   isCurrentTurn,
   isDealer,
   actionMessage,
+  coins,
 }) => {
   const isPartner = player.team === 'TEAM_A';
 
@@ -43,7 +45,7 @@ export const AIPlayerSlot: React.FC<AIPlayerSlotProps> = ({
             {isDealer && <span className="dealer-pill" title="Dealer">DEALER</span>}
           </div>
           <span className={`ai-role-pill ${isPartner ? 'partner' : 'opponent'}`}>
-            {isPartner ? 'Team A • Partner' : 'Team B • Opponent'}
+            {isPartner ? 'Team A' : 'Team B'} • 🪙 {coins}
           </span>
           {isCurrentTurn && (
             <div className="ai-turn-pill">

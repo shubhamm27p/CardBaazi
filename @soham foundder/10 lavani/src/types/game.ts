@@ -29,6 +29,7 @@ export interface Player {
   position: PlayerPosition;
   hand: Card[];
   tricksWon: number;
+  coins: number;
 }
 
 export interface PlayedCard {
@@ -97,4 +98,9 @@ export interface GameState {
   statusMessage: string;
   highlightCardId: string | null;
   settings: GameSettings;
+  coinSettlement?: {
+    changes: Record<string, number>;
+    newBalances: Record<string, number>;
+    winningTeamId: string;
+  };
 }

@@ -15,6 +15,7 @@ import {
 } from './gameLogic.js';
 
 import { generateRandomIndianAINames } from '../../shared/aiNames.js';
+import { CoinEngine } from '../../shared/coinEngine.js';
 import crypto from 'crypto';
 
 export class RoomManager {
@@ -79,7 +80,8 @@ export class RoomManager {
           isBot: false,
           isHost: true,
           disconnected: false,
-          replacedByBot: false
+          replacedByBot: false,
+          coins: 100
         },
         null,
         null,
@@ -117,7 +119,8 @@ export class RoomManager {
           isBot: true,
           isHost: false,
           disconnected: false,
-          replacedByBot: false
+          replacedByBot: false,
+          coins: 100
         };
       }
     }
@@ -170,7 +173,8 @@ export class RoomManager {
       isBot: false,
       isHost: false,
       disconnected: false,
-      replacedByBot: false
+      replacedByBot: false,
+      coins: 100
     };
 
     this.socketToRoom.set(socketId, { roomId, seatIndex: vacantSeat });
@@ -202,7 +206,8 @@ export class RoomManager {
           isBot: true,
           isHost: false,
           disconnected: false,
-          replacedByBot: false
+          replacedByBot: false,
+          coins: 100
         };
       }
     }
@@ -637,6 +642,22 @@ export class RoomManager {
     });
 
     const winner = room.finishedPlayers[0] || null;
+    let coinSettlement = null;
+    if (winner) {
+      const coinEngine = new CoinEngine(room.seats.map(s => ({ id: String(s.seatIndex), team: 'NONE', coins: s.coins })));
+      const winnerSeatIndex = room.seats.findIndex(s => s && s.userId === winner.userId);
+      const settlement = coinEngine.settleIndividualWin(String(winnerSeatIndex));
+      room.seats.forEach(s => {
+        if (s) {
+          s.coins = settlement.newBalances[String(s.seatIndex)];
+        }
+      });
+      coinSettlement = {
+        changes: settlement.changes,
+        newBalances: settlement.newBalances,
+        winnerId: String(winnerSeatIndex)
+      };
+    }
 
     this.io.to(roomId).emit('game-finished', {
       winner,
@@ -644,7 +665,8 @@ export class RoomManager {
       stats: detailedStats,
       totalDurationSeconds,
       roundNumber: room.roundNumber,
-      totalTurns: room.turnCount
+      totalTurns: room.turnCount,
+      coinSettlement
     });
 
     this.broadcastGameState(roomId);
@@ -708,7 +730,8 @@ export class RoomManager {
         skipsCount: room.stats[i].skipsCount,
         isTurn,
         hasFinished,
-        rank: (room.finishedPlayers.find(f => f.seat === i) || {}).rank || null
+        rank: (room.finishedPlayers.find(f => f.seat === i) || {}).rank || null,
+        coins: seat.coins
       };
     });
 

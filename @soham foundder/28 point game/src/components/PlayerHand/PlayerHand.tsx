@@ -19,6 +19,7 @@ interface PlayerHandProps {
   onSkipRevealHukum?: () => void;
   canRevealKQ?: boolean;
   onRevealKQ?: () => void;
+  coins: number;
 }
 
 export const PlayerHand: React.FC<PlayerHandProps> = ({
@@ -36,6 +37,7 @@ export const PlayerHand: React.FC<PlayerHandProps> = ({
   onSkipRevealHukum,
   canRevealKQ = false,
   onRevealKQ,
+  coins,
 }) => {
   const [sortBy, setSortBy] = useState<'suit' | 'rank'>('suit');
   const isDealer = dealerPlayerId === 'player1';
@@ -153,7 +155,7 @@ export const PlayerHand: React.FC<PlayerHandProps> = ({
             <span className="player-name-text">You</span>
             {isDealer && <span className="dealer-pill" title="Dealer">DEALER</span>}
           </div>
-          <span className="player-team-pill team-a">Team A (Partner: Arjun)</span>
+          <span className="player-team-pill team-a">Team A (Partner: Arjun) • 🪙 {coins}</span>
         </div>
 
         {isMyTurn && (

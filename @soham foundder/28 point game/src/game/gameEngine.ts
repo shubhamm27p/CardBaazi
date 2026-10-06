@@ -46,7 +46,7 @@ import { soundManager } from './sound';
 import { determineTrickWinner, getPlayableCards } from './tricks';
 import { createSecretHukum, revealHukum, SecretHukum } from './trump';
 import { generateRandomIndianAINames } from '../../../shared/aiNames';
-
+import { CoinEngine } from '../../../shared/coinEngine';
 const initialAiNames = generateRandomIndianAINames(3);
 
 export const PLAYERS: PlayerInfo[] = [
@@ -58,6 +58,7 @@ export const PLAYERS: PlayerInfo[] = [
     isHuman: true,
     avatar: '👨‍💼',
     position: 'south',
+    coins: 100,
   },
   {
     id: 'player2',
@@ -67,6 +68,7 @@ export const PLAYERS: PlayerInfo[] = [
     isHuman: false,
     avatar: initialAiNames[0].avatar,
     position: 'east',
+    coins: 100,
   },
   {
     id: 'player3',
@@ -76,6 +78,7 @@ export const PLAYERS: PlayerInfo[] = [
     isHuman: false,
     avatar: initialAiNames[1].avatar,
     position: 'north',
+    coins: 100,
   },
   {
     id: 'player4',
@@ -85,6 +88,7 @@ export const PLAYERS: PlayerInfo[] = [
     isHuman: false,
     avatar: initialAiNames[2].avatar,
     position: 'west',
+    coins: 100,
   },
 ];
 
@@ -133,6 +137,7 @@ export interface FullGameState {
   kqRuleConfig: KQRuleConfig;
   latestKqCelebration: KQCombinationRecord | null;
   eventLog: { time: string, message: string }[];
+  playerCoins: Record<PlayerId, number>;
 }
 
 export function createInitialGameState(): FullGameState {
@@ -141,6 +146,7 @@ export function createInitialGameState(): FullGameState {
     handNumber: 1,
     dealer: 'player4', // West deals, so South (You) starts bidding
     hands: { player1: [], player2: [], player3: [], player4: [] },
+    playerCoins: { player1: 100, player2: 100, player3: 100, player4: 100 },
     remainingDeck: [],
     bidding: initBidding('player1', 1),
     hukum: null,
@@ -965,6 +971,41 @@ export class TwentyEightGame {
     const bidderName = this.getPlayerName(result.bidder);
     const successText = result.bidSuccess ? 'SUCCESSFUL' : 'FAILED';
 
+    const winningTeam = result.bidSuccess ? result.biddingTeam : (result.biddingTeam === 'TEAM_A' ? 'TEAM_B' : 'TEAM_A');
+    const margin = Math.abs(result.teamATotalPoints - result.teamBTotalPoints);
+    
+    // Transfer coins based on universal rules
+    const coinEngine = new CoinEngine([
+      { id: 'player1', team: 'TEAM_A', coins: this.state.playerCoins.player1 },
+      { id: 'player2', team: 'TEAM_B', coins: this.state.playerCoins.player2 },
+      { id: 'player3', team: 'TEAM_A', coins: this.state.playerCoins.player3 },
+      { id: 'player4', team: 'TEAM_B', coins: this.state.playerCoins.player4 }
+    ]);
+
+    const settlement = coinEngine.settleTeamWin(winningTeam);
+
+    result.coinSettlement = {
+      winningTeam,
+      margin,
+      p1_change: settlement.changes['player1'],
+      p2_change: settlement.changes['player2'],
+      p3_change: settlement.changes['player3'],
+      p4_change: settlement.changes['player4'],
+      finalCoins: {
+        p1: settlement.newBalances['player1'],
+        p2: settlement.newBalances['player2'],
+        p3: settlement.newBalances['player3'],
+        p4: settlement.newBalances['player4']
+      }
+    };
+
+    const newCoins = {
+      player1: settlement.newBalances['player1'],
+      player2: settlement.newBalances['player2'],
+      player3: settlement.newBalances['player3'],
+      player4: settlement.newBalances['player4']
+    };
+
     const historyEntry: MatchHistoryEntry = {
       handNumber: this.state.handNumber,
       timestamp: Date.now(),
@@ -993,8 +1034,9 @@ export class TwentyEightGame {
       currentTrick: null,
       matchScore: updatedMatchScore,
       handResult: result,
+      playerCoins: newCoins,
       matchHistory: [...this.state.matchHistory, historyEntry],
-      actionMessage: `Hand Complete! Bid was ${result.finalBid} by ${bidderName} (${result.biddingTeam}). Result: ${successText}! (Team A: ${result.teamATotalPoints} pts | Team B: ${result.teamBTotalPoints} pts)`,
+      actionMessage: `Game Complete! ${winningTeam} won. (Margin: ${margin} pts)`,
     };
 
     this.notify();

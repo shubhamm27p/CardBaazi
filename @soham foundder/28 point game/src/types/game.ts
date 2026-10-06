@@ -28,6 +28,7 @@ export interface PlayerInfo {
   isHuman: boolean;
   avatar: string;
   position: 'south' | 'east' | 'north' | 'west';
+  coins: number;
 }
 
 export interface PlayedCard {
@@ -168,6 +169,20 @@ export interface HandResult {
   pointVerificationError?: string;
   kqCombinations: KQCombinationRecord[];
   tricks: Trick[];
+  coinSettlement?: {
+    p1_change: number;
+    p3_change: number;
+    p2_change: number;
+    p4_change: number;
+    margin: number;
+    winningTeam: TeamId | 'DRAW';
+    finalCoins: {
+      p1: number;
+      p2: number;
+      p3: number;
+      p4: number;
+    };
+  };
 }
 
 export interface AiExplanationData {

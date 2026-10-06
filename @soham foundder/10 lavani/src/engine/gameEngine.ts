@@ -18,6 +18,7 @@ import {
 import { soundManager } from './sound';
 import { choosePartnerHukum } from './ai';
 import { generateRandomIndianAINames } from '../../../shared/aiNames';
+import { CoinEngine } from '../../../shared/coinEngine';
 
 export const INITIAL_PLAYERS = {
   p1: {
@@ -29,6 +30,7 @@ export const INITIAL_PLAYERS = {
     position: 'bottom' as const,
     hand: [],
     tricksWon: 0,
+    coins: 100,
   },
   p2: {
     id: 'p2' as PlayerId,
@@ -39,6 +41,7 @@ export const INITIAL_PLAYERS = {
     position: 'right' as const,
     hand: [],
     tricksWon: 0,
+    coins: 100,
   },
   p3: {
     id: 'p3' as PlayerId,
@@ -49,6 +52,7 @@ export const INITIAL_PLAYERS = {
     position: 'top' as const,
     hand: [],
     tricksWon: 0,
+    coins: 100,
   },
   p4: {
     id: 'p4' as PlayerId,
@@ -59,6 +63,7 @@ export const INITIAL_PLAYERS = {
     position: 'left' as const,
     hand: [],
     tricksWon: 0,
+    coins: 100,
   },
 };
 
@@ -473,23 +478,45 @@ export function resolveTrick(currentState: GameState): GameState {
     updatedTeamScores.teamA.isKot = teamAKot;
     updatedTeamScores.teamB.isKot = teamBKot;
 
-    if (teamADehlas > teamBDehlas || (teamADehlas === teamBDehlas && teamATricks > teamBTricks)) {
+    const winningTeamId = (teamADehlas > teamBDehlas || (teamADehlas === teamBDehlas && teamATricks > teamBTricks)) ? 'teamA' : 'teamB';
+
+    if (winningTeamId === 'teamA') {
       soundManager.playVictory();
     } else {
       soundManager.playDefeat();
     }
 
+    const coinEngine = new CoinEngine([
+      { id: 'p1', team: 'teamA', coins: players['p1'].coins },
+      { id: 'p2', team: 'teamB', coins: players['p2'].coins },
+      { id: 'p3', team: 'teamA', coins: players['p3'].coins },
+      { id: 'p4', team: 'teamB', coins: players['p4'].coins }
+    ]);
+    const settlement = coinEngine.settleTeamWin(winningTeamId);
+
+    const nextPlayers = {
+      ...players,
+      [winnerPlayerId]: updatedWinner,
+    };
+    
+    // Apply new coin balances
+    Object.keys(settlement.newBalances).forEach((pid) => {
+      nextPlayers[pid as PlayerId].coins = settlement.newBalances[pid];
+    });
+
     return {
       ...currentState,
-      players: {
-        ...players,
-        [winnerPlayerId]: updatedWinner,
-      },
+      players: nextPlayers,
       teamScores: updatedTeamScores,
       trickHistory: updatedHistory,
       lastTrickWinner: winnerPlayerId,
       phase: 'roundOver',
       statusMessage: `Game Over! Team A: ${teamADehlas} Dehlas vs Team B: ${teamBDehlas} Dehlas.`,
+      coinSettlement: {
+        changes: settlement.changes,
+        newBalances: settlement.newBalances,
+        winningTeamId
+      }
     };
   }
 

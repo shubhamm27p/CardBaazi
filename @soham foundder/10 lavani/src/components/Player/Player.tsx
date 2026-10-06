@@ -46,7 +46,9 @@ export const Player: React.FC<PlayerProps> = ({
             <span className="player-name">
               {player.name} {isHuman && '(You)'}
             </span>
-            <span className={`player-team-pill ${teamClass}`}>{teamLabel}</span>
+            <span className={`player-team-pill ${teamClass}`}>
+              {teamLabel} • 🪙 {player.coins}
+            </span>
           </div>
 
           <div className="player-sub-status">

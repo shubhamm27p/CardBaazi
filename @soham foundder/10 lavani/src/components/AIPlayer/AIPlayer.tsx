@@ -19,7 +19,16 @@ export const AIPlayer: React.FC<AIPlayerProps> = ({
 
   return (
     <div className="ai-status-bubble" data-testid={`ai-status-${player.id}`}>
-      {thought || `${player.name} is deciding... (${difficulty})`}
+      {thought ? (
+        <span>{thought}</span>
+      ) : (
+        <span>
+          {isActiveTurn && `${player.name} is deciding... (${difficulty}) `}
+        </span>
+      )}
+      <div className="ai-player-coins" style={{ marginTop: '4px', fontSize: '0.85em', color: '#ffd700', fontWeight: 'bold' }}>
+        🪙 {player.coins}
+      </div>
     </div>
   );
 };

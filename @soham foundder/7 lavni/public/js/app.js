@@ -113,6 +113,12 @@ const elements = {
     top: document.getElementById('cards-top'),
     right: document.getElementById('cards-right')
   },
+  coinsCounts: {
+    bottom: document.getElementById('coins-bottom'),
+    left: document.getElementById('coins-left'),
+    top: document.getElementById('coins-top'),
+    right: document.getElementById('coins-right')
+  },
   statuses: {
     top: document.getElementById('status-top'),
     left: document.getElementById('status-left'),
@@ -327,7 +333,7 @@ function initSocket() {
     }
   });
 
-  socket.on('game-finished', ({ winner, rankings, stats, totalDurationSeconds, roundNumber }) => {
+  socket.on('game-finished', ({ winner, rankings, stats, totalDurationSeconds, roundNumber, coinSettlement }) => {
     soundEngine.playWinFanfare();
 
     // Update ranked rating if playing in ranked or expert mode
@@ -345,7 +351,7 @@ function initSocket() {
       updateRankedDisplay();
     }
 
-    renderWinnerModal(winner, rankings, stats, totalDurationSeconds, roundNumber);
+    renderWinnerModal(winner, rankings, stats, totalDurationSeconds, roundNumber, coinSettlement);
   });
 
   socket.on('chat-message', ({ sender, avatar, seatIndex, message, emoji }) => {
@@ -466,6 +472,7 @@ function renderPlayerPods(players, currentTurnSeat) {
     const avatarEl = elements.avatars[pos];
     const nameEl = elements.names[pos];
     const cardsEl = elements.cardsCounts[pos];
+    const coinsEl = elements.coinsCounts[pos];
     const statusEl = elements.statuses[pos];
     const dangerEl = elements.dangers[pos];
     const visualEl = elements.opponentVisuals[pos];
@@ -475,6 +482,9 @@ function renderPlayerPods(players, currentTurnSeat) {
     avatarEl.textContent = player.avatar || '👤';
     nameEl.textContent = pos === 'bottom' ? `${player.name} (You)` : player.name;
     cardsEl.textContent = `${player.cardCount} card${player.cardCount === 1 ? '' : 's'}`;
+    if (coinsEl) {
+      coinsEl.textContent = player.coins !== undefined ? player.coins : 100;
+    }
 
     if (player.hasFinished) {
       cardsEl.textContent = `Rank #${player.rank} 🏆`;
@@ -715,7 +725,7 @@ function renderWaitingLobby(players) {
 }
 
 // Render Winner Modal with Comprehensive Match Statistics
-function renderWinnerModal(winner, rankings, stats = [], totalDurationSeconds = 0, roundNumber = 1) {
+function renderWinnerModal(winner, rankings, stats = [], totalDurationSeconds = 0, roundNumber = 1, coinSettlement = null) {
   elements.modalWinner.classList.add('is-open');
   elements.winnerNameDisplay.textContent = winner ? `${winner.avatar} ${winner.name} won 1st Place!` : 'Match Finished!';
 
@@ -745,6 +755,40 @@ function renderWinnerModal(winner, rankings, stats = [], totalDurationSeconds = 
     `;
     elements.rankingsTableBody.appendChild(tr);
   });
+
+  const coinContainer = document.getElementById('coin-settlement-container');
+  if (coinContainer && coinSettlement) {
+    coinContainer.innerHTML = `
+      <div class="coin-settlement-section" style="background: rgba(0,0,0,0.4); border-radius: 12px; padding: 15px; margin-top: 15px; color: #fff; font-family: monospace;">
+        <h3 style="text-align: center; color: #F9D976; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 15px 0;">
+          Coin Settlement
+        </h3>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+          <div style="width: 45%;">
+            <div style="margin-bottom: 5px;">
+              Player 1 <span style="color: ${coinSettlement.changes['0'] >= 0 ? '#4CAF50' : '#F44336'}">${coinSettlement.changes['0'] >= 0 ? '+' : ''}${coinSettlement.changes['0']}</span> &rarr; 🪙 ${coinSettlement.newBalances['0']}
+            </div>
+            <div style="margin-bottom: 5px;">
+              Player 3 <span style="color: ${coinSettlement.changes['2'] >= 0 ? '#4CAF50' : '#F44336'}">${coinSettlement.changes['2'] >= 0 ? '+' : ''}${coinSettlement.changes['2']}</span> &rarr; 🪙 ${coinSettlement.newBalances['2']}
+            </div>
+          </div>
+          <div style="width: 45%; text-align: right;">
+            <div style="margin-bottom: 5px;">
+              Player 2 <span style="color: ${coinSettlement.changes['1'] >= 0 ? '#4CAF50' : '#F44336'}">${coinSettlement.changes['1'] >= 0 ? '+' : ''}${coinSettlement.changes['1']}</span> &rarr; 🪙 ${coinSettlement.newBalances['1']}
+            </div>
+            <div style="margin-bottom: 5px;">
+              Player 4 <span style="color: ${coinSettlement.changes['3'] >= 0 ? '#4CAF50' : '#F44336'}">${coinSettlement.changes['3'] >= 0 ? '+' : ''}${coinSettlement.changes['3']}</span> &rarr; 🪙 ${coinSettlement.newBalances['3']}
+            </div>
+          </div>
+        </div>
+        <div style="text-align: center; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 10px; color: #aaa;">
+          TOTAL COINS: 🪙 400
+        </div>
+      </div>
+    `;
+  } else if (coinContainer) {
+    coinContainer.innerHTML = '';
+  }
 }
 
 // Mode Selection Handler

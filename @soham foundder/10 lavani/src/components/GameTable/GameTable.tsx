@@ -541,6 +541,7 @@ export const GameTable: React.FC = () => {
         <GameOver
           isOpen={gameState.phase === 'roundOver'}
           teamScores={gameState.teamScores}
+          coinSettlement={gameState.coinSettlement}
           onPlayAgain={handleStartGame}
           onViewHistory={() => setShowHistory(true)}
           onClose={() => setIsResultModalHidden(true)}

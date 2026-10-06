@@ -155,7 +155,38 @@ export const HandResultModal: React.FC<HandResultModalProps> = ({
           )}
         </div>
 
+        {/* Coin Settlement Section */}
+        {result.coinSettlement && (
+          <div className="coin-settlement-section" style={{ background: 'rgba(0,0,0,0.4)', borderRadius: '12px', padding: '15px', marginTop: '15px', color: '#fff', fontFamily: 'monospace' }}>
+            <h3 style={{ textAlign: 'center', color: '#F9D976', textTransform: 'uppercase', letterSpacing: '2px', margin: '0 0 15px 0' }}>
+              Coin Settlement
+            </h3>
+            
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '15px' }}>
+              <div style={{ width: '45%' }}>
+                <div style={{ marginBottom: '5px' }}>
+                  Player 1 <span style={{ color: result.coinSettlement.p1_change >= 0 ? '#4CAF50' : '#F44336' }}>{result.coinSettlement.p1_change >= 0 ? '+' : ''}{result.coinSettlement.p1_change}</span> &rarr; {result.coinSettlement.finalCoins.p1} Coins
+                </div>
+                <div style={{ marginBottom: '5px' }}>
+                  Player 3 <span style={{ color: result.coinSettlement.p3_change >= 0 ? '#4CAF50' : '#F44336' }}>{result.coinSettlement.p3_change >= 0 ? '+' : ''}{result.coinSettlement.p3_change}</span> &rarr; {result.coinSettlement.finalCoins.p3} Coins
+                </div>
+              </div>
 
+              <div style={{ width: '45%', textAlign: 'right' }}>
+                <div style={{ marginBottom: '5px' }}>
+                  Player 2 <span style={{ color: result.coinSettlement.p2_change >= 0 ? '#4CAF50' : '#F44336' }}>{result.coinSettlement.p2_change >= 0 ? '+' : ''}{result.coinSettlement.p2_change}</span> &rarr; {result.coinSettlement.finalCoins.p2} Coins
+                </div>
+                <div style={{ marginBottom: '5px' }}>
+                  Player 4 <span style={{ color: result.coinSettlement.p4_change >= 0 ? '#4CAF50' : '#F44336' }}>{result.coinSettlement.p4_change >= 0 ? '+' : ''}{result.coinSettlement.p4_change}</span> &rarr; {result.coinSettlement.finalCoins.p4} Coins
+                </div>
+              </div>
+            </div>
+
+            <div style={{ textAlign: 'center', borderTop: '1px solid rgba(255,255,255,0.2)', paddingTop: '10px', color: '#aaa' }}>
+              Total Coins: 400
+            </div>
+          </div>
+        )}
 
         {/* Action Buttons */}
         <div className="result-actions-row">
