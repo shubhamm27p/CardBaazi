@@ -1,7 +1,6 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/", "destination": "/login.html" },
     { "source": "/api/(.*)", "destination": "https://cardbaazi.onrender.com/api/$1" },
     { "source": "/api", "destination": "https://cardbaazi.onrender.com/api" },
     { "source": "/socket.io/(.*)", "destination": "https://cardbaazi.onrender.com/socket.io/$1" },
