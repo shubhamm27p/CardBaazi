@@ -2,11 +2,15 @@
   "name": "card-arena-workspace",
   "version": "1.0.0",
   "description": "Root workspace for Card Arena",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.2",
+    "dotenv": "^18.0.5"
+  },
   "scripts": {
+    "postinstall": "cd \"@soham foundder\" && npm install && npm run install-all",
     "dev": "node \"@soham foundder/start-all.js\"",
     "start": "node \"@soham foundder/start-all.js\""
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  }
 }
