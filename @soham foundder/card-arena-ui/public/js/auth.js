@@ -18,6 +18,13 @@ window.addEventListener('load', async function() {
             return;
         }
 
+        // Listen for auth state changes
+        Clerk.addListener(({ user }) => {
+            if (user) {
+                window.location.href = '/index.html';
+            }
+        });
+
         // If not signed in, mount the SignIn component
         const signInDiv = document.getElementById('sign-in');
         
