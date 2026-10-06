@@ -23,6 +23,7 @@ window.addEventListener('load', async function() {
         
         const redirectUrl = window.location.origin + '/index.html';
         Clerk.mountSignIn(signInDiv, {
+            routing: "hash",
             afterSignInUrl: redirectUrl,
             afterSignUpUrl: redirectUrl,
             redirectUrl: redirectUrl,
