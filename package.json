@@ -1,0 +1,12 @@
+{
+  "name": "card-arena-workspace",
+  "version": "1.0.0",
+  "description": "Root workspace for Card Arena",
+  "scripts": {
+    "dev": "node start-all.js",
+    "start": "node start-all.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

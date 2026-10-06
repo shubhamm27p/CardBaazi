@@ -52,6 +52,24 @@ app.get('/api/protected-data', verifySupabaseJWT, (req, res) => {
   res.json({ message: 'Success! You have accessed protected data.', user: req.user });
 });
 
+// Admin endpoint to fetch Clerk users
+app.get('/api/admin/users', async (req, res) => {
+  try {
+    const response = await fetch('https://api.clerk.com/v1/users', {
+      headers: {
+        'Authorization': `Bearer ${process.env.CLERK_SECRET_KEY}`
+      }
+    });
+    if (!response.ok) {
+        return res.status(response.status).json({ error: 'Failed to fetch from Clerk' });
+    }
+    const users = await response.json();
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.use((req, res, next) => {
   if (req.url === '/7-lavni' || req.url === '/10-lavani' || req.url === '/play-28') {
     return res.redirect(req.url + '/');
@@ -99,12 +117,28 @@ app.get('/admin-login', (req, res) => res.sendFile(path.join(__dirname, 'public'
 app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
 
+const roomCreationAttempts = new Map();
+const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
+const MAX_ROOMS_PER_MINUTE = 5;
+
 // --- 7 LAVNI SOCKET.IO EVENTS ---
 io.on('connection', (socket) => {
   console.log(`[Socket] New connection: ${socket.id}`);
 
   socket.on('create-room', ({ mode = 'expert', difficulty = 'expert', name, avatar, userId }) => {
     try {
+      const ip = socket.handshake.address;
+      const now = Date.now();
+      const attempts = roomCreationAttempts.get(ip) || [];
+      const recentAttempts = attempts.filter(time => now - time < RATE_LIMIT_WINDOW);
+      
+      if (recentAttempts.length >= MAX_ROOMS_PER_MINUTE) {
+        return socket.emit('error-msg', { message: 'Too many rooms created. Please wait a minute.' });
+      }
+      
+      recentAttempts.push(now);
+      roomCreationAttempts.set(ip, recentAttempts);
+
       const room = roomManager.createRoom({
         mode,
         difficulty,

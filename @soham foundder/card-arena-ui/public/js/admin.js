@@ -32,32 +32,92 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 2. Populate Mock Data (To be replaced with real API calls)
     
-    // Empty Mock Users
-    const mockUsers = [];
-
+    // Fetch Users Data from Backend (Clerk API)
+    let mockUsers = [];
     const usersTableBody = document.getElementById('users-table-body');
+
+    async function fetchUsers() {
+        try {
+            usersTableBody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 20px;">Loading users...</td></tr>';
+            const response = await fetch('/api/admin/users');
+            if (!response.ok) throw new Error('Failed to fetch users');
+            
+            const data = await response.json();
+            // Clerk API returns an array of user objects
+            mockUsers = data.map(u => ({
+                id: u.id.slice(-8), // short id
+                name: (u.first_name || '') + ' ' + (u.last_name || ''),
+                email: u.email_addresses && u.email_addresses.length > 0 ? u.email_addresses[0].email_address : 'No Email',
+                coins: 1000, // Default coins, in a real app this comes from your database
+                status: 'active',
+                rawId: u.id
+            }));
+            renderUsersTable();
+        } catch (error) {
+            console.error(error);
+            usersTableBody.innerHTML = '<tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding: 20px;">Error loading users from server.</td></tr>';
+        }
+    }
     
-    if (mockUsers.length === 0) {
-        usersTableBody.innerHTML = '<tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding: 20px;">No users found in database.</td></tr>';
+    function renderUsersTable() {
+        usersTableBody.innerHTML = '';
+        if (mockUsers.length === 0) {
+            usersTableBody.innerHTML = '<tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding: 20px;">No users found in database.</td></tr>';
+        }
+
+        mockUsers.forEach(user => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${user.id}</td>
+                <td><strong>${user.name}</strong></td>
+                <td>${user.email}</td>
+                <td>🪙 ${Number(user.coins).toLocaleString()}</td>
+                <td><span class="status-badge status-${user.status}">${user.status.toUpperCase()}</span></td>
+                <td>
+                    <button class="btn btn-sm btn-outline" onclick="rewardUser('${user.name}', '${user.id}')" style="background: #eab308; color: #fff; border: none;">Reward</button>
+                    <button class="btn btn-sm btn-outline">Edit</button>
+                    ${user.status !== 'banned' 
+                        ? `<button class="btn btn-sm btn-danger" onclick="alert('Ban ${user.name}?')">Ban</button>`
+                        : `<button class="btn btn-sm btn-outline" onclick="alert('Unban ${user.name}?')">Unban</button>`}
+                </td>
+            `;
+            usersTableBody.appendChild(tr);
+        });
     }
 
-    mockUsers.forEach(user => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${user.id}</td>
-            <td><strong>${user.name}</strong></td>
-            <td>${user.email}</td>
-            <td>🪙 ${user.coins.toLocaleString()}</td>
-            <td><span class="status-badge status-${user.status}">${user.status.toUpperCase()}</span></td>
-            <td>
-                <button class="btn btn-sm btn-outline" onclick="rewardUser('${user.name}', '${user.id}')" style="background: #eab308; color: #fff; border: none;">Reward Coins</button>
-                <button class="btn btn-sm btn-outline">Edit</button>
-                ${user.status !== 'banned' 
-                    ? `<button class="btn btn-sm btn-danger" onclick="alert('Ban ${user.name}?')">Ban</button>`
-                    : `<button class="btn btn-sm btn-outline" onclick="alert('Unban ${user.name}?')">Unban</button>`}
-            </td>
-        `;
-        usersTableBody.appendChild(tr);
+    fetchUsers();
+
+    // Add User Modal Logic
+    const addUserModal = document.getElementById('add-user-modal');
+    const btnAddUser = document.getElementById('btn-add-user');
+    const btnCancelUser = document.getElementById('btn-cancel-user');
+    const addUserForm = document.getElementById('add-user-form');
+
+    btnAddUser.addEventListener('click', () => {
+        addUserModal.style.display = 'flex';
+    });
+
+    btnCancelUser.addEventListener('click', () => {
+        addUserModal.style.display = 'none';
+        addUserForm.reset();
+    });
+
+    addUserForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const newId = 'USR-' + Math.floor(1000 + Math.random() * 9000);
+        const newUser = {
+            id: newId,
+            name: document.getElementById('new-user-name').value,
+            email: document.getElementById('new-user-email').value,
+            coins: document.getElementById('new-user-coins').value,
+            status: 'active'
+        };
+        mockUsers.push(newUser);
+        localStorage.setItem('adminUsers', JSON.stringify(mockUsers));
+        renderUsersTable();
+        addUserModal.style.display = 'none';
+        addUserForm.reset();
+        alert('User added successfully!');
     });
 
     // Window scope function for inline onclick handler
@@ -71,8 +131,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Empty Mock Games
-    const mockGames = [];
+    // Mock Games Data
+    const mockGames = [
+        { id: 'RM-A7B2', type: '7 Lavni (Expert)', players: '4/4', stakes: 500, status: 'In Progress' },
+        { id: 'RM-X9Q1', type: '28 Point Game', players: '2/4', stakes: 1000, status: 'Waiting' },
+        { id: 'RM-M3P8', type: '10 Lavani', players: '4/4', stakes: 200, status: 'In Progress' }
+    ];
 
     const gamesTableBody = document.getElementById('games-table-body');
     

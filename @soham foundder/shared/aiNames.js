@@ -1,5 +1,5 @@
 export const MALE_NAMES = [
-  "Aarav", "Vihaan", "Advik", "Reyansh", "Arjun", "Kabir", "Vivaan", "Ayaan", "Rudra", "Atharv", 
+  "Aarav", "Vihaan","Kshitija", "Advik", "Reyansh", "Arjun", "Kabir", "Vivaan", "Ayaan", "Rudra", "Atharv", 
   "Ishaan", "Dhruv", "Arnav", "Kiaan", "Yuvaan", "Shaurya", "Ved", "Agastya", "Neil", "Rohan", 
   "Krish", "Aryan", "Samar", "Aditya", "Ranveer", "Darsh", "Ivaan", "Aarush", "Devansh", "Parth", 
   "Rishi", "Samarth", "Shiv", "Vidyut", "Kavish", "Nirvaan", "Pranav", "Raghav", "Siddharth", 
@@ -15,7 +15,7 @@ export const MALE_NAMES = [
 ];
 
 export const FEMALE_NAMES = [
-  "Ananya", "Aadhya", "Myra", "Kiara", "Anvi", "Avni", "Ira", "Siya", "Aarohi", "Meera", 
+  "Kshitija","Ananya", "Aadhya", "Myra", "Kiara", "Anvi", "Avni", "Ira", "Siya", "Aarohi", "Meera", 
   "Navya", "Riya", "Tara", "Diya", "Anika", "Ishita", "Kavya", "Shanaya", "Prisha", "Aanya", 
   "Vanya", "Sara", "Aarna", "Mahi", "Zoya", "Amaya", "Bhavya", "Chahat", "Drishti", "Esha", 
   "Falguni", "Gauri", "Hina", "Inaya", "Jhanvi", "Kashvi", "Lavanya", "Mahika", "Naina", "Ojasvi", 

@@ -113,8 +113,11 @@
                 <div class="panel">
                     <div class="panel-header">
                         <h2>User Management</h2>
-                        <div class="search-bar">
-                            <input type="text" placeholder="Search users by name or ID...">
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <div class="search-bar" style="margin: 0;">
+                                <input type="text" placeholder="Search users by name or ID...">
+                            </div>
+                            <button class="btn btn-primary" id="btn-add-user">Add New User</button>
                         </div>
                     </div>
                     <div class="table-container">
@@ -386,6 +389,31 @@
                 </div>
             </section>
         </main>
+    </div>
+
+    <!-- Add User Modal -->
+    <div id="add-user-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+        <div class="panel" style="width: 400px; max-width: 90%; position: relative;">
+            <h2 style="margin-bottom: 20px;">Add New User</h2>
+            <form id="add-user-form" class="settings-form">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="new-user-name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="new-user-email" required>
+                </div>
+                <div class="form-group">
+                    <label>Starting Coins</label>
+                    <input type="number" id="new-user-coins" value="1000" required>
+                </div>
+                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+                    <button type="button" class="btn btn-outline" id="btn-cancel-user">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save User</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script src="js/admin.js"></script>

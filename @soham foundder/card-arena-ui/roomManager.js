@@ -14,7 +14,7 @@ import {
   SUIT_SYMBOLS
 } from './gameLogic.js';
 
-import { generateRandomIndianAINames } from '../../shared/aiNames.js';
+import { generateRandomIndianAINames } from '../shared/aiNames.js';
 
 export class RoomManager {
   constructor(io) {

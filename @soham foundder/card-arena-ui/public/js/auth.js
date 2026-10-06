@@ -12,7 +12,7 @@ window.addEventListener('load', async function() {
         });
 
         // Check if user is already signed in
-        if (Clerk.user) {
+        if (Clerk.user || Clerk.session || (Clerk.client && Clerk.client.activeSessions && Clerk.client.activeSessions.length > 0)) {
             // If signed in, redirect to main hub
             window.location.href = '/index.html';
             return;
@@ -22,6 +22,8 @@ window.addEventListener('load', async function() {
         const signInDiv = document.getElementById('sign-in');
         
         Clerk.mountSignIn(signInDiv, {
+            afterSignInUrl: '/index.html',
+            afterSignUpUrl: '/index.html',
             appearance: {
                 variables: {
                     colorPrimary: "#3b82f6", // Blue accent

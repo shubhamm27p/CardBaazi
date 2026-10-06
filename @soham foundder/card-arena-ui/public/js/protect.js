@@ -7,7 +7,7 @@ window.addEventListener('load', async function() {
         }
 
         await Clerk.load({
-            publishableKey: 'pk_test_b3Blbi1tb25hcmNoLTM5NzMuY2xlcmsuYWNjb3VudHMuZGV2JA'
+            publishableKey: 'pk_test_c2Vuc2libGUtdG91Y2FuLTY0MjguY2xlcmsuYWNjb3VudHMuZGV2JA'
         });
 
         if (!Clerk.user) {

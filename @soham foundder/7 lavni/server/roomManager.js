@@ -15,6 +15,7 @@ import {
 } from './gameLogic.js';
 
 import { generateRandomIndianAINames } from '../../shared/aiNames.js';
+import crypto from 'crypto';
 
 export class RoomManager {
   constructor(io) {
@@ -43,7 +44,7 @@ export class RoomManager {
   generateRoomCode() {
     let code;
     do {
-      code = Math.random().toString(36).substring(2, 8).toUpperCase();
+      code = crypto.randomBytes(3).toString('hex').toUpperCase();
     } while (this.rooms.has(code));
     return code;
   }
