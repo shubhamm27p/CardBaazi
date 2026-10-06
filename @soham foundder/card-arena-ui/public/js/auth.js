@@ -21,9 +21,11 @@ window.addEventListener('load', async function() {
         // If not signed in, mount the SignIn component
         const signInDiv = document.getElementById('sign-in');
         
+        const redirectUrl = window.location.origin + '/index.html';
         Clerk.mountSignIn(signInDiv, {
-            afterSignInUrl: '/index.html',
-            afterSignUpUrl: '/index.html',
+            afterSignInUrl: redirectUrl,
+            afterSignUpUrl: redirectUrl,
+            redirectUrl: redirectUrl,
             appearance: {
                 variables: {
                     colorPrimary: "#3b82f6", // Blue accent
