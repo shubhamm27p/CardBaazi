@@ -7,6 +7,18 @@
     {
       "source": "/socket.io/:match*",
       "destination": "https://cardbaazi.onrender.com/socket.io/:match*"
+    },
+    {
+      "source": "/play-28/:match*",
+      "destination": "https://cardbaazi.onrender.com/play-28/:match*"
+    },
+    {
+      "source": "/7-lavni/:match*",
+      "destination": "https://cardbaazi.onrender.com/7-lavni/:match*"
+    },
+    {
+      "source": "/10-lavani/:match*",
+      "destination": "https://cardbaazi.onrender.com/10-lavani/:match*"
     }
   ]
 }
