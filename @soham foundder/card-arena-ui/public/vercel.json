@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:match*",
+      "destination": "https://cardbaazi.onrender.com/api/:match*"
+    },
+    {
+      "source": "/socket.io/:match*",
+      "destination": "https://cardbaazi.onrender.com/socket.io/:match*"
+    }
+  ]
+}
