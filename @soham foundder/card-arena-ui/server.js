@@ -19,13 +19,7 @@ const appUrl = process.env.APP_URL || process.env.PUBLIC_APP_URL || 'http://loca
 const allowedOrigins = (process.env.ALLOWED_ORIGINS || `${appUrl},http://localhost:3001,http://localhost:5173`).split(',').map((origin) => origin.trim()).filter(Boolean);
 
 const corsOptions = {
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-      return;
-    }
-    callback(new Error('Origin not allowed by CORS policy'));
-  },
+  origin: '*', // Allow all origins to support dynamic Vercel preview URLs
   credentials: true,
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
