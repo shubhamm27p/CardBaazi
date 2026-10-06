@@ -1,4 +1,5 @@
 {
+  "cleanUrls": true,
   "rewrites": [
     { "source": "/", "destination": "/login.html" },
     { "source": "/api/(.*)", "destination": "https://cardbaazi.onrender.com/api/$1" },
